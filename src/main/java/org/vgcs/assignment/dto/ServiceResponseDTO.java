@@ -1,6 +1,6 @@
-package dto;
+package org.vgcs.assignment.dto;
 
-import model.Service;
+import org.vgcs.assignment.model.Service;
 
 import java.util.List;
 

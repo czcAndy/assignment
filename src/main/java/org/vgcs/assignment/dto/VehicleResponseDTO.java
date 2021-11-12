@@ -1,6 +1,6 @@
-package dto;
+package org.vgcs.assignment.dto;
 
-import model.Vehicle;
+import org.vgcs.assignment.model.Vehicle;
 
 import java.util.List;
 

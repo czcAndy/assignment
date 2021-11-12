@@ -1,4 +1,4 @@
-package dto;
+package org.vgcs.assignment.dto;
 
 
 public record VehicleInfoResponseDTO(String msisdn, String engineStatus, String fleet, String brand,

@@ -1,4 +1,4 @@
-package model;
+package org.vgcs.assignment.model;
 
 import java.util.Date;
 
