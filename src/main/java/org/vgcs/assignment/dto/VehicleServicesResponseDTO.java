@@ -4,5 +4,5 @@ import org.vgcs.assignment.model.Service;
 
 import java.util.List;
 
-public record ServiceResponseDTO(String communicationStatus, List<Service> services) {
+public record VehicleServicesResponseDTO(String communicationStatus, List<Service> services) {
 }
