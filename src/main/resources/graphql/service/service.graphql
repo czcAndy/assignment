@@ -1,5 +1,0 @@
-type Service {
-    serviceName: String,
-    status: String,
-    lastUpdated: DateTime
-}

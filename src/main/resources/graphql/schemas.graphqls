@@ -1,4 +1,45 @@
 scalar DateTime
+
+schema {
+    query: Query
+}
+
+#All available queries
 type Query {
-    vehicle(id : String) : Vehicle
+    vehicle(id : ID) : VehicleComplete,
+    vehiclesByPartialName(name : String) : [VehicleComplete]
+    vehiclesByServiceStatus(serviceName: String, serviceStatus: String) : [VehicleComplete]
+}
+
+type VehicleComplete {
+    id: String,
+    vehicleSimple: VehicleSimple,
+    vehicleDetails: VehicleDetails,
+    vehicleServicesWithCommStatus: VehicleServicesWithCommStatus
+}
+
+type VehicleSimple {
+    id: String,
+    name: String
+}
+
+type VehicleDetails {
+    msidn: String,
+    engineStatus: String,
+    fleet: String,
+    brand: String,
+    countryOfOperation: String,
+    chassisNumber: String,
+    chassisSeries: String
+}
+
+type VehicleServicesWithCommStatus {
+    communicationStatus: String,
+    services: [Service]
+}
+
+type Service {
+    serviceName: String,
+    status: String,
+    lastUpdated: DateTime
 }
