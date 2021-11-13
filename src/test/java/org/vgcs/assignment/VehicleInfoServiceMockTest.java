@@ -54,7 +54,7 @@ class VehicleInfoServiceMockTest {
         VehicleInfoResponseDTO vehicleResponseMono = vehicleInfoService
                 .getVehiclesById("id");
 
-        assert (vehicleResponseMono.msisdn().equals("+4678625847"));
+        assert (vehicleResponseMono.msidn().equals("+4678625847"));
         assert (vehicleResponseMono.engineStatus().equals("OK"));
         assert (vehicleResponseMono.fleet().equals("Thor's fleet"));
         assert (vehicleResponseMono.brand().equals("Volvo Construction Equipment"));

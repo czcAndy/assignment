@@ -20,7 +20,7 @@ public class VehicleServiceImpl implements VehicleService {
     public VehicleResponseDTO getVehicles() {
         return webClient
                 .get()
-                .uri("/list/")
+                .uri("/vehicle/list/")
                 .retrieve()
                 .onStatus(HttpStatus::isError, MonoHandler::throwRuntimeExceptionFromClientResponse)
                 .bodyToMono(VehicleResponseDTO.class)

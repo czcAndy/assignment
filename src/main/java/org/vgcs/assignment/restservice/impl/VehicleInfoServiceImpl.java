@@ -19,7 +19,7 @@ public class VehicleInfoServiceImpl implements VehicleInfoService {
     public VehicleInfoResponseDTO getVehiclesById(String id) {
         return webClient
                 .get()
-                .uri("/vehicles/{id}", id)
+                .uri("/vehicle/info?id={id}", id)
                 .retrieve()
                 .onStatus(HttpStatus::isError, MonoHandler::throwRuntimeExceptionFromClientResponse)
                 .bodyToMono(VehicleInfoResponseDTO.class)
