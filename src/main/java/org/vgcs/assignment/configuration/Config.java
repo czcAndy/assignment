@@ -1,5 +1,7 @@
 package org.vgcs.assignment.configuration;
 
+import graphql.scalars.ExtendedScalars;
+import graphql.schema.GraphQLScalarType;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
@@ -31,5 +33,10 @@ public class Config {
                 .baseUrl(hostname + ":" + port)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
+    }
+
+    @Bean
+    public GraphQLScalarType dateTime() {
+        return ExtendedScalars.DateTime;
     }
 }

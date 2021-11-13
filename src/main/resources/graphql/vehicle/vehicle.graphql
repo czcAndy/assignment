@@ -1,0 +1,13 @@
+type Vehicle {
+    id : String,
+    name: String,
+    msisdn: String,
+    engineStatus: String,
+    fleet: String,
+    brand: String,
+    countryOfOperation: String,
+    chassisNumber: String,
+    chassisSeries: String,
+    communicationStatus: String,
+    services: [Service]
+}

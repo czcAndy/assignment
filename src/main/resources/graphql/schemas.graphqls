@@ -1,0 +1,4 @@
+scalar DateTime
+type Query {
+    vehicle(id : String) : Vehicle
+}
