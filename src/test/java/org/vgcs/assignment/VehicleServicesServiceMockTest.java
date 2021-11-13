@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.vgcs.assignment.dto.VehicleServicesResponseDTO;
-import org.vgcs.assignment.model.Service;
-import org.vgcs.assignment.services.impl.VehicleServicesServiceImpl;
+import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
+import org.vgcs.assignment.restservice.model.Service;
+import org.vgcs.assignment.restservice.impl.VehicleServicesServiceImpl;
 
 import java.io.IOException;
 import java.sql.Date;

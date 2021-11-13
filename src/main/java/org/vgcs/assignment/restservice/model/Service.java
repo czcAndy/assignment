@@ -1,4 +1,4 @@
-package org.vgcs.assignment.model;
+package org.vgcs.assignment.restservice.model;
 
 import java.util.Date;
 

@@ -1,11 +1,11 @@
-package org.vgcs.assignment.services.impl;
+package org.vgcs.assignment.restservice.impl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.vgcs.assignment.dto.VehicleInfoResponseDTO;
-import org.vgcs.assignment.exceptionHandlers.MonoHandler;
-import org.vgcs.assignment.services.VehicleInfoService;
+import org.vgcs.assignment.restservice.dto.VehicleInfoResponseDTO;
+import org.vgcs.assignment.restservice.exceptionHandler.MonoHandler;
+import org.vgcs.assignment.restservice.VehicleInfoService;
 
 @Service
 public class VehicleInfoServiceImpl implements VehicleInfoService {

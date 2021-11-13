@@ -10,9 +10,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.vgcs.assignment.dto.VehicleResponseDTO;
-import org.vgcs.assignment.model.Vehicle;
-import org.vgcs.assignment.services.VehicleService;
+import org.vgcs.assignment.restservice.dto.VehicleResponseDTO;
+import org.vgcs.assignment.restservice.model.Vehicle;
+import org.vgcs.assignment.restservice.VehicleService;
 
 import java.io.IOException;
 import java.util.List;

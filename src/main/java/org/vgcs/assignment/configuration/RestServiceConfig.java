@@ -15,7 +15,7 @@ import reactor.netty.http.client.HttpClient;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class Config {
+public class RestServiceConfig {
 
     @Bean
     public WebClient webClient(@Value("${service.hostname}") final String hostname,
@@ -33,10 +33,5 @@ public class Config {
                 .baseUrl(hostname + ":" + port)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
-    }
-
-    @Bean
-    public GraphQLScalarType dateTime() {
-        return ExtendedScalars.DateTime;
     }
 }

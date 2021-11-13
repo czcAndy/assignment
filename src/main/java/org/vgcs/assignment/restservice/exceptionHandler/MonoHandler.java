@@ -1,4 +1,4 @@
-package org.vgcs.assignment.exceptionHandlers;
+package org.vgcs.assignment.restservice.exceptionHandler;
 
 import org.springframework.web.reactive.function.client.ClientResponse;
 import reactor.core.publisher.Mono;

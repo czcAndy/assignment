@@ -1,6 +1,6 @@
-package org.vgcs.assignment.dto;
+package org.vgcs.assignment.restservice.dto;
 
-import org.vgcs.assignment.model.Service;
+import org.vgcs.assignment.restservice.model.Service;
 
 import java.util.List;
 
