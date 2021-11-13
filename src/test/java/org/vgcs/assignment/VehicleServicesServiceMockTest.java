@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.vgcs.assignment.dto.VehicleServicesResponseDTO;
 import org.vgcs.assignment.model.Service;
-import org.vgcs.assignment.services.VehicleServicesService;
+import org.vgcs.assignment.services.impl.VehicleServicesServiceImpl;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -29,7 +29,7 @@ class VehicleServicesServiceMockTest {
     private static int PORT = 8080;
 
     @Autowired
-    private VehicleServicesService vehicleServicesService;
+    private VehicleServicesServiceImpl vehicleServicesService;
 
     public VehicleServicesServiceMockTest() {
         objectMapper = new ObjectMapper();
