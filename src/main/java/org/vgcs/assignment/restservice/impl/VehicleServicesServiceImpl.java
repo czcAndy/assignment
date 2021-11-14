@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.vgcs.assignment.restservice.VehicleServicesService;
 import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
-import org.vgcs.assignment.restservice.exceptionHandler.MonoHandler;
+import org.vgcs.assignment.restservice.exception.RestCallException;
+import reactor.core.publisher.Mono;
 
 @Service
 public class VehicleServicesServiceImpl implements VehicleServicesService {
@@ -20,7 +21,9 @@ public class VehicleServicesServiceImpl implements VehicleServicesService {
                 .get()
                 .uri("/vehicle/services?id={id}", id)
                 .retrieve()
-                .onStatus(HttpStatus::isError, MonoHandler::throwRuntimeExceptionFromClientResponse)
+                .onStatus(HttpStatus::isError, clientResponse -> clientResponse
+                        .bodyToMono(String.class)
+                        .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id))))
                 .bodyToMono(VehicleServicesResponseDTO.class)
                 .block();
     }
