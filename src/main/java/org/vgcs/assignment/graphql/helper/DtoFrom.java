@@ -19,7 +19,7 @@ public class DtoFrom {
         try {
             vehicleResponseDto = vehicleService.getVehicles();
         } catch (RestCallException ex) {
-            errorMessage = ex.getErrorCode() + ": " + ex.getMessage();
+            errorMessage = ex.getErrorCode() + ":" + ex.getMessage() + ":" + ex.getResourceId();
         }
 
         responseWrapper.setData(vehicleResponseDto);
@@ -36,7 +36,7 @@ public class DtoFrom {
         try {
             vehicleInfoResponseDTO = vehicleInfoService.getVehiclesById(id);
         } catch (RestCallException ex) {
-            errorMessage = ex.getErrorCode() + ": " + ex.getMessage();
+            errorMessage = ex.getErrorCode() + ":" + ex.getMessage() + ":" + ex.getResourceId();
         }
 
         responseWrapper.setData(vehicleInfoResponseDTO);
@@ -54,7 +54,7 @@ public class DtoFrom {
         try {
             vehicleServicesResponseDTO = vehicleServicesService.getVehicleServices(id);
         } catch (RestCallException ex) {
-            errorMessage = ex.getErrorCode() + ": " + ex.getMessage();
+            errorMessage = ex.getErrorCode() + ":" + ex.getMessage() + ":" + ex.getResourceId();
         }
 
         responseWrapper.setData(vehicleServicesResponseDTO);
