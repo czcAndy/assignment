@@ -10,7 +10,9 @@ import org.vgcs.assignment.graphql.model.VehicleComplete;
 import org.vgcs.assignment.graphql.model.VehicleServicesWithCommStatus;
 import org.vgcs.assignment.restservice.VehicleServicesService;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -24,7 +26,7 @@ public class VehicleServiceWithCommStatusResolver implements GraphQLResolver<Veh
     public CompletableFuture<DataFetcherResult<VehicleServicesWithCommStatus>> vehicleServicesWithCommStatus(VehicleComplete vehicleComplete) {
         return CompletableFuture.supplyAsync(() -> {
             var result = DataFetcherResult.<VehicleServicesWithCommStatus>newResult();
-            var servicesDTOWrapper = DtoFrom.vehicleServicesService(vehicleServicesService, vehicleComplete.getId());
+            var servicesDTOWrapper = DtoFrom.vehicleServicesService(vehicleServicesService, vehicleComplete.getId().toString());
 
             if(servicesDTOWrapper.hasData()) {
                 var servicesDTO = servicesDTOWrapper.getData();
@@ -33,7 +35,7 @@ public class VehicleServiceWithCommStatusResolver implements GraphQLResolver<Veh
                     Service graphQlServiceModel = new Service();
                     graphQlServiceModel.setServiceName(service.serviceName());
                     graphQlServiceModel.setStatus(service.status());
-                    graphQlServiceModel.setLastUpdated(ZonedDateTime.now());
+                    graphQlServiceModel.setLastUpdated(ZonedDateTime.parse(service.lastUpdate(), DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("Europe/Stockholm"))));
                     return graphQlServiceModel;
                 }).toList();
 

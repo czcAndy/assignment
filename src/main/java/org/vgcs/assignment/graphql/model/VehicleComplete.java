@@ -1,16 +1,18 @@
 package org.vgcs.assignment.graphql.model;
 
+import java.util.UUID;
+
 public class VehicleComplete {
-    private String id;
+    private UUID id;
     private VehicleSimple vehicleSimple;
     private VehicleDetails vehicleDetails;
     private VehicleServicesWithCommStatus vehicleServicesWithCommStatus;
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

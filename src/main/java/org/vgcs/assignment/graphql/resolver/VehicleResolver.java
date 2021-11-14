@@ -11,6 +11,7 @@ import org.vgcs.assignment.restservice.VehicleServicesService;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -27,7 +28,7 @@ public class VehicleResolver implements GraphQLQueryResolver {
 
     public VehicleComplete vehicle(String id) {
         VehicleComplete vehicleComplete = new VehicleComplete();
-        vehicleComplete.setId(id);
+        vehicleComplete.setId(UUID.fromString(id));
 
         return vehicleComplete;
     }
@@ -41,7 +42,7 @@ public class VehicleResolver implements GraphQLQueryResolver {
                 var vehicleCompleteList = vehicleListWrapper.getData().vehicles().stream()
                         .filter(v -> Objects.nonNull(v.name()) && v.name().contains(name)).map(v -> {
                             VehicleComplete vh = new VehicleComplete();
-                            vh.setId(v.id());
+                            vh.setId(UUID.fromString(v.id()));
                             return vh;
                         }).toList();
 
@@ -82,7 +83,7 @@ public class VehicleResolver implements GraphQLQueryResolver {
                         })
                         .map(v -> {
                             VehicleComplete vehicleComplete = new VehicleComplete();
-                            vehicleComplete.setId(v.id());
+                            vehicleComplete.setId(UUID.fromString(v.id()));
                             return vehicleComplete;
                         }).toList();
 

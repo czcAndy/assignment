@@ -28,12 +28,12 @@ public class VehicleSimpleResolver implements GraphQLResolver<VehicleComplete> {
                 var vehicleDto = vehicleListWrapper.getData();
 
                 var vehicleOptional = vehicleDto.vehicles().stream()
-                        .filter(v -> v.id().equals(vehicleComplete.getId()))
+                        .filter(v -> v.id().equals(vehicleComplete.getId().toString()))
                         .findFirst();
 
                 if (vehicleOptional.isPresent()){
                     var vehicleSimple = new VehicleSimple();
-                    vehicleSimple.setId(vehicleComplete.getId());
+                    vehicleSimple.setId(vehicleComplete.getId().toString());
                     vehicleSimple.setName(vehicleOptional.get().name());
                     result.data(vehicleSimple);
                 }

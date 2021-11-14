@@ -50,8 +50,8 @@ class VehicleServicesServiceMockTest {
     void getVehicleServicesResponseDTO_200() throws Exception {
         VehicleServicesResponseDTO vehicleServicesResponseMock = new VehicleServicesResponseDTO("ACTIVE",
                 List.of(
-                        new Service("GPS", "ACTIVE", Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))),
-                        new Service("FuelMeasurement", "DEACTIVATED", Date.from(Instant.parse("2019-01-01T09:23:05+01:00")))));
+                        new Service("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
+                        new Service("FuelMeasurement", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
 
         mockWebServer.enqueue(new MockResponse()
                 .setBody(objectMapper.writeValueAsString(vehicleServicesResponseMock))
@@ -64,11 +64,11 @@ class VehicleServicesServiceMockTest {
 
         assert (vehicleResponseMono.services().get(0).serviceName().equals("GPS"));
         assert (vehicleResponseMono.services().get(0).status().equals("ACTIVE"));
-        assert (vehicleResponseMono.services().get(0).lastUpdated().equals(Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))));
+        assert (vehicleResponseMono.services().get(0).lastUpdate().equals(Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))));
 
         assert (vehicleResponseMono.services().get(1).serviceName().equals("FuelMeasurement"));
         assert (vehicleResponseMono.services().get(1).status().equals("DEACTIVATED"));
-        assert (vehicleResponseMono.services().get(1).lastUpdated().equals(Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))));
+        assert (vehicleResponseMono.services().get(1).lastUpdate().equals(Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))));
     }
 
     @Test

@@ -22,7 +22,7 @@ public class VehicleDetailsResolver implements GraphQLResolver<VehicleComplete> 
     public CompletableFuture<DataFetcherResult<VehicleDetails>> vehicleDetails(VehicleComplete vehicleComplete) {
         return CompletableFuture.supplyAsync(() -> {
             var result = DataFetcherResult.<VehicleDetails>newResult();
-            var vehicleInfoWrapper = DtoFrom.vehicleInfoService(vehicleInfoService, vehicleComplete.getId());
+            var vehicleInfoWrapper = DtoFrom.vehicleInfoService(vehicleInfoService, vehicleComplete.getId().toString());
 
             if (vehicleInfoWrapper.hasData()) {
                 var vehicleInfoResponseDTO = vehicleInfoWrapper.getData();
