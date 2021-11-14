@@ -1,18 +1,18 @@
 package org.vgcs.assignment.graphql.resolver;
 
+import graphql.execution.DataFetcherResult;
+import graphql.kickstart.execution.error.GenericGraphQLError;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import org.springframework.stereotype.Component;
+import org.vgcs.assignment.graphql.helper.DtoFrom;
 import org.vgcs.assignment.graphql.model.VehicleComplete;
 import org.vgcs.assignment.restservice.VehicleService;
 import org.vgcs.assignment.restservice.VehicleServicesService;
-import org.vgcs.assignment.restservice.dto.VehicleResponseDTO;
-import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+
 
 @Component
 public class VehicleResolver implements GraphQLQueryResolver {
@@ -32,38 +32,66 @@ public class VehicleResolver implements GraphQLQueryResolver {
         return vehicleComplete;
     }
 
-    public CompletableFuture<List<VehicleComplete>> vehiclesByPartialName(String name) {
+    public CompletableFuture<DataFetcherResult<List<VehicleComplete>>> vehiclesByPartialName(String name) {
         return CompletableFuture.supplyAsync(() -> {
-            VehicleResponseDTO vehicles = vehicleService.getVehicles();
-            return vehicles.vehicles().stream().filter(v -> Objects.nonNull(v.name()) && v.name().contains(name)).map(v -> {
-                VehicleComplete vh = new VehicleComplete();
-                vh.setId(v.id());
-                return vh;
-            }).collect(Collectors.toList());
+            var result = DataFetcherResult.<List<VehicleComplete>>newResult();
+            var vehicleListWrapper = DtoFrom.vehicleService(vehicleService);
+
+            if (vehicleListWrapper.hasData()){
+                var vehicleCompleteList = vehicleListWrapper.getData().vehicles().stream()
+                        .filter(v -> Objects.nonNull(v.name()) && v.name().contains(name)).map(v -> {
+                            VehicleComplete vh = new VehicleComplete();
+                            vh.setId(v.id());
+                            return vh;
+                        }).toList();
+
+                result.data(vehicleCompleteList);
+            }
+
+            if (vehicleListWrapper.hasError()) {
+                result.error(new GenericGraphQLError(vehicleListWrapper.getErrorMessage()));
+            }
+
+            return  result.build();
         });
     }
 
-    public CompletableFuture<List<VehicleComplete>> vehiclesByServiceStatus(String serviceName, String serviceStatus) {
+
+    public CompletableFuture<DataFetcherResult<List<VehicleComplete>>> vehiclesByServiceStatus(String serviceName, String serviceStatus) {
         return CompletableFuture.supplyAsync(() -> {
-            VehicleResponseDTO vehicles = vehicleService.getVehicles();
-            List<String> ids = vehicles.vehicles().stream()
-                    .filter(v -> {
-                            VehicleServicesResponseDTO vehicleServices = vehicleServicesService.getVehicleServices(v.id());
-                                return vehicleServices.services().stream()
-                                        .filter(s -> s.serviceName().equals(serviceName) && s.status().equals(serviceStatus))
-                                        .findAny()
-                                        .isPresent();
-                    })
-                    .map(v -> v.id())
-                    .collect(Collectors.toList());
+            var result = DataFetcherResult.<List<VehicleComplete>>newResult();
+            var vehicleListWrapper = DtoFrom.vehicleService(vehicleService);
 
+            if (vehicleListWrapper.hasData()) {
+                var vehicleDto = vehicleListWrapper.getData();
 
-            return  ids.stream().map(id -> {
-                VehicleComplete vehicleComplete = new VehicleComplete();
-                vehicleComplete.setId(id);
-                return vehicleComplete;
-            }).collect(Collectors.toList());
+                var vehicles = vehicleDto.vehicles().stream()
+                        .filter(v -> {
+                            var vehicleServicesDTOWrapper = DtoFrom.vehicleServicesService(vehicleServicesService, v.id());
+                            if(vehicleServicesDTOWrapper.hasError()) {
+                                result.error(new GenericGraphQLError(vehicleServicesDTOWrapper.getErrorMessage()));
+                            }
+
+                            if (vehicleServicesDTOWrapper.hasData()) {
+                                var vehicleServicesDto = vehicleServicesDTOWrapper.getData();
+                                if(vehicleServicesDto.services() != null)
+                                    return vehicleServicesDto.services().stream()
+                                            .anyMatch(s -> s.serviceName().equals(serviceName) && s.status().equals(serviceStatus));
+                            }
+                            return false;
+                        })
+                        .map(v -> {
+                            VehicleComplete vehicleComplete = new VehicleComplete();
+                            vehicleComplete.setId(v.id());
+                            return vehicleComplete;
+                        }).toList();
+
+                result.data(vehicles);
+            }
+
+            return result.build();
         });
     }
+
 }
 
