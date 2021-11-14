@@ -1,7 +1,10 @@
 package org.vgcs.assignment.graphql.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 
+@Document
 public class VehicleServicesWithCommStatus {
     private String communicationStatus;
     private List<Service> services;

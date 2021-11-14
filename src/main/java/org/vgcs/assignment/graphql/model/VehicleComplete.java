@@ -1,18 +1,23 @@
 package org.vgcs.assignment.graphql.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.UUID;
 
+@Document
 public class VehicleComplete {
-    private UUID id;
+    @Id
+    private String id;
     private VehicleSimple vehicleSimple;
     private VehicleDetails vehicleDetails;
     private VehicleServicesWithCommStatus vehicleServicesWithCommStatus;
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

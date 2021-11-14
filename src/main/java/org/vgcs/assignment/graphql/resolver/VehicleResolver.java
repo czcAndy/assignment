@@ -6,6 +6,7 @@ import graphql.kickstart.tools.GraphQLQueryResolver;
 import org.springframework.stereotype.Component;
 import org.vgcs.assignment.graphql.helper.DtoFrom;
 import org.vgcs.assignment.graphql.model.VehicleComplete;
+import org.vgcs.assignment.persistance.repository.VehicleRepository;
 import org.vgcs.assignment.restservice.VehicleService;
 import org.vgcs.assignment.restservice.VehicleServicesService;
 
@@ -20,16 +21,17 @@ public class VehicleResolver implements GraphQLQueryResolver {
 
     private final VehicleService vehicleService;
     private final VehicleServicesService vehicleServicesService;
+    private final VehicleRepository vehicleRepository;
 
-    public VehicleResolver(VehicleService vehicleService, VehicleServicesService vehicleServicesService) {
+    public VehicleResolver(VehicleService vehicleService, VehicleServicesService vehicleServicesService, VehicleRepository vehicleRepository) {
         this.vehicleService = vehicleService;
         this.vehicleServicesService = vehicleServicesService;
+        this.vehicleRepository = vehicleRepository;
     }
 
     public VehicleComplete vehicle(String id) {
         VehicleComplete vehicleComplete = new VehicleComplete();
-        vehicleComplete.setId(UUID.fromString(id));
-
+        vehicleComplete.setId(id);
         return vehicleComplete;
     }
 
@@ -42,7 +44,7 @@ public class VehicleResolver implements GraphQLQueryResolver {
                 var vehicleCompleteList = vehicleListWrapper.getData().vehicles().stream()
                         .filter(v -> Objects.nonNull(v.name()) && v.name().contains(name)).map(v -> {
                             VehicleComplete vh = new VehicleComplete();
-                            vh.setId(UUID.fromString(v.id()));
+                            vh.setId(v.id());
                             return vh;
                         }).toList();
 
@@ -83,7 +85,7 @@ public class VehicleResolver implements GraphQLQueryResolver {
                         })
                         .map(v -> {
                             VehicleComplete vehicleComplete = new VehicleComplete();
-                            vehicleComplete.setId(UUID.fromString(v.id()));
+                            vehicleComplete.setId(v.id());
                             return vehicleComplete;
                         }).toList();
 

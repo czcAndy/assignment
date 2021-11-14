@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.vgcs.assignment.graphql.helper.DtoFrom;
 import org.vgcs.assignment.graphql.model.VehicleComplete;
 import org.vgcs.assignment.graphql.model.VehicleSimple;
+import org.vgcs.assignment.persistance.repository.VehicleRepository;
 import org.vgcs.assignment.restservice.VehicleService;
 
 import java.util.concurrent.CompletableFuture;
@@ -14,9 +15,11 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class VehicleSimpleResolver implements GraphQLResolver<VehicleComplete> {
     private final VehicleService vehicleService;
+    private final VehicleRepository vehicleRepository;
 
-    public VehicleSimpleResolver(VehicleService vehicleService) {
+    public VehicleSimpleResolver(VehicleService vehicleService, VehicleRepository vehicleRepository) {
         this.vehicleService = vehicleService;
+        this.vehicleRepository = vehicleRepository;
     }
 
     public CompletableFuture<DataFetcherResult<VehicleSimple>> vehicleSimple(VehicleComplete vehicleComplete) {
@@ -28,15 +31,19 @@ public class VehicleSimpleResolver implements GraphQLResolver<VehicleComplete> {
                 var vehicleDto = vehicleListWrapper.getData();
 
                 var vehicleOptional = vehicleDto.vehicles().stream()
-                        .filter(v -> v.id().equals(vehicleComplete.getId().toString()))
+                        .filter(v -> v.id().equals(vehicleComplete.getId()))
                         .findFirst();
 
                 if (vehicleOptional.isPresent()){
                     var vehicleSimple = new VehicleSimple();
-                    vehicleSimple.setId(vehicleComplete.getId().toString());
+                    vehicleSimple.setId(vehicleComplete.getId());
                     vehicleSimple.setName(vehicleOptional.get().name());
                     result.data(vehicleSimple);
+
+                    vehicleComplete.setVehicleSimple(vehicleSimple);
+                    vehicleRepository.save(vehicleComplete);
                 }
+
             }
 
             if (vehicleListWrapper.hasError()) {

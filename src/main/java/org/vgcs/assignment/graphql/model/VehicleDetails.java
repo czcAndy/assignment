@@ -1,5 +1,8 @@
 package org.vgcs.assignment.graphql.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class VehicleDetails {
     private String msidn;
     private String engineStatus;

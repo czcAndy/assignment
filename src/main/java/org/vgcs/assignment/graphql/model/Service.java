@@ -1,11 +1,14 @@
 package org.vgcs.assignment.graphql.model;
 
-import java.time.ZonedDateTime;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
+@Document
 public class Service {
     private String serviceName;
     private String status;
-    private ZonedDateTime lastUpdated;
+    private LocalDateTime lastUpdated;
 
     public String getServiceName() {
         return serviceName;
@@ -23,11 +26,11 @@ public class Service {
         this.status = status;
     }
 
-    public ZonedDateTime getLastUpdated() {
+    public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(ZonedDateTime lastUpdated) {
+    public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 }
