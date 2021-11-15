@@ -21,7 +21,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<VehicleDTO> getVehicles() {
+    public List<VehicleDTO> getAll() {
         return webClient
                 .get()
                 .uri("/vehicle/list/")

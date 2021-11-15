@@ -16,7 +16,7 @@ public class VehicleServicesServiceImpl implements VehicleServicesService {
         this.webClient = webClient;
     }
 
-    public VehicleServicesResponseDTO getVehicleServices(String id) {
+    public VehicleServicesResponseDTO get(String id) {
         return webClient
                 .get()
                 .uri("/vehicle/services?id={id}", id)

@@ -58,7 +58,7 @@ class VehicleServiceMockTest {
                 .addHeader("Content-Type", "application/json"));
 
         List<VehicleDTO> vehicleResponseMono = vehicleService
-                .getVehicles();
+                .getAll();
 
         assert (vehicleResponseMono.get(0).id().equals("bd45a676-0d0e-48b4-9693-e8196eb7fcbf"));
         assert (vehicleResponseMono.get(0).name().equals("big truck"));
@@ -75,7 +75,7 @@ class VehicleServiceMockTest {
                 .addHeader("Content-Type", "application/json")
                 .setBody(message)
                 .setResponseCode(404));
-        Exception exception = assertThrows(Exception.class, () -> vehicleService.getVehicles());
+        Exception exception = assertThrows(Exception.class, () -> vehicleService.getAll());
 
         assert (exception.getMessage().equals(message));
     }
@@ -88,7 +88,7 @@ class VehicleServiceMockTest {
                 .addHeader("Content-Type", "application/json")
                 .setBody(message)
                 .setResponseCode(401));
-        Exception exception = assertThrows(Exception.class, () -> vehicleService.getVehicles());
+        Exception exception = assertThrows(Exception.class, () -> vehicleService.getAll());
 
         assert (exception.getMessage().equals(message));
     }
@@ -101,7 +101,7 @@ class VehicleServiceMockTest {
                 .addHeader("Content-Type", "application/json")
                 .setBody(message)
                 .setResponseCode(500));
-        Exception exception = assertThrows(Exception.class, () -> vehicleService.getVehicles());
+        Exception exception = assertThrows(Exception.class, () -> vehicleService.getAll());
 
         assert (exception.getMessage().equals(message));
     }
@@ -114,7 +114,7 @@ class VehicleServiceMockTest {
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "application/json")
                 .setResponseCode(500));
-        Exception exception = assertThrows(Exception.class, () -> vehicleService.getVehicles());
+        Exception exception = assertThrows(Exception.class, () -> vehicleService.getAll());
         //TODO: The functionality for the WebClient needs to be revised.
         // Expected to throw an error, instead got a null value for the VehicleInfoResponseDTO
         assert (exception.getMessage().equals(message));

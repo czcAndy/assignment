@@ -58,7 +58,7 @@ class VehicleServicesServiceMockTest {
                 .addHeader("Content-Type", "application/json"));
 
         VehicleServicesResponseDTO vehicleResponseMono = vehicleServicesService
-                .getVehicleServices("id");
+                .get("id");
 
         assert (vehicleResponseMono.communicationStatus().equals("ACTIVE"));
 
@@ -79,7 +79,7 @@ class VehicleServicesServiceMockTest {
                 .setBody(message)
                 .setResponseCode(400));
 
-        Exception exception = assertThrows(Exception.class, () -> vehicleServicesService.getVehicleServices(""));
+        Exception exception = assertThrows(Exception.class, () -> vehicleServicesService.get(""));
 
         assert (exception.getMessage().equals(message));
     }
@@ -92,7 +92,7 @@ class VehicleServicesServiceMockTest {
                 .setBody(message)
                 .setResponseCode(401));
 
-        Exception exception = assertThrows(Exception.class, () -> vehicleServicesService.getVehicleServices(""));
+        Exception exception = assertThrows(Exception.class, () -> vehicleServicesService.get(""));
 
         assert (exception.getMessage().equals(message));
     }
@@ -105,7 +105,7 @@ class VehicleServicesServiceMockTest {
                 .setBody(message)
                 .setResponseCode(500));
 
-        Exception exception = assertThrows(Exception.class, () -> vehicleServicesService.getVehicleServices(""));
+        Exception exception = assertThrows(Exception.class, () -> vehicleServicesService.get(""));
 
         assert (exception.getMessage().equals(message));
     }

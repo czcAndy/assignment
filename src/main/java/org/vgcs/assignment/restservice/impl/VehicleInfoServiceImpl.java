@@ -17,7 +17,7 @@ public class VehicleInfoServiceImpl implements VehicleInfoService {
     }
 
     @Override
-    public VehicleInfoResponseDTO getVehiclesById(String id)  {
+    public VehicleInfoResponseDTO get(String id)  {
         return webClient
                 .get()
                 .uri("/vehicle/info?id={id}", id)

@@ -1,4 +1,4 @@
-package org.vgcs.assignment.graphql.helper;
+package org.vgcs.assignment.graphql.datafetcher;
 
 public class DtoWrapper<T> {
     private String errorMessage;

@@ -1,4 +1,4 @@
-package org.vgcs.assignment.graphql.helper;
+package org.vgcs.assignment.graphql.datafetcher;
 
 import org.vgcs.assignment.graphql.model.Service;
 import org.vgcs.assignment.graphql.model.Vehicle;
@@ -8,11 +8,17 @@ import org.vgcs.assignment.restservice.dto.VehicleDTO;
 import org.vgcs.assignment.restservice.dto.VehicleInfoResponseDTO;
 import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Mapper {
 
     public static Vehicle from(VehicleDTO obj) {
+        if (obj == null)
+            return null;
+
         Vehicle v = new Vehicle();
         v.setId(obj.id());
         v.setName(obj.name());
@@ -20,6 +26,9 @@ public class Mapper {
         return v;
     }
     public static VehicleInfo from(VehicleInfoResponseDTO obj) {
+        if (obj == null)
+            return null;
+
         VehicleInfo vi = new VehicleInfo();
         vi.setMsidn(obj.msidn());
         vi.setEngineStatus(obj.engineStatus());
@@ -33,14 +42,19 @@ public class Mapper {
     }
 
     public static VehicleServices from(VehicleServicesResponseDTO obj) {
+        if (obj == null)
+            return null;
+
         VehicleServices vs = new VehicleServices();
         vs.setCommunicationStatus(obj.communicationStatus());
 
         List<Service> services = List.of();
 
-        if( vs.getServices() != null)
-            services =  vs.getServices().stream()
-                .map(sDto -> new Service(sDto.getServiceName(), sDto.getStatus(), sDto.getLastUpdated()))
+        if(obj.services() != null)
+            services =  obj.services().stream()
+                .map(sDto -> new Service(sDto.serviceName(), sDto.status(),
+                        LocalDateTime.parse(sDto.lastUpdate(),
+                                DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("Europe/Stockholm")))))
                 .toList();
 
         vs.setServices(services);
