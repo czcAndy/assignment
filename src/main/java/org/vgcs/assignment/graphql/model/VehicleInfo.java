@@ -6,16 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-
 @Document
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Service {
-    private String serviceName;
-    private String status;
-    private LocalDateTime lastUpdated;
+public class VehicleInfo {
+    private String msidn;
+    private String engineStatus;
+    private String fleet;
+    private String brand;
+    private String countryOfOperation;
+    private String chassisNumber;
+    private String chassisSeries;
 
 }

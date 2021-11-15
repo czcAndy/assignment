@@ -6,24 +6,24 @@ schema {
 
 #All available queries
 type Query {
-    vehicle(id : ID) : VehicleComplete,
-    vehiclesByPartialName(name : String) : [VehicleComplete]
-    vehiclesByServiceStatus(serviceName: String, serviceStatus: String) : [VehicleComplete]
+    query(id : ID) : VehicleComplete,
+    queryByPartialName(name : String) : [VehicleComplete]
+    queryByServiceStatus(serviceName: String, serviceStatus: String) : [VehicleComplete]
 }
 
 type VehicleComplete {
     id: String,
-    vehicleSimple: VehicleSimple,
-    vehicleDetails: VehicleDetails,
-    vehicleServicesWithCommStatus: VehicleServicesWithCommStatus
+    vehicle: Vehicle,
+    vehicleInfo: VehicleInfo,
+    vehicleServices: VehicleServices
 }
 
-type VehicleSimple {
+type Vehicle {
     id: String,
     name: String
 }
 
-type VehicleDetails {
+type VehicleInfo {
     msidn: String,
     engineStatus: String,
     fleet: String,
@@ -33,7 +33,7 @@ type VehicleDetails {
     chassisSeries: String
 }
 
-type VehicleServicesWithCommStatus {
+type VehicleServices {
     communicationStatus: String,
     services: [Service]
 }

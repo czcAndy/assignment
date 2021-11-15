@@ -1,23 +1,26 @@
 package org.vgcs.assignment.graphql.helper;
 
+import graphql.com.google.common.collect.Lists;
 import org.vgcs.assignment.restservice.VehicleInfoService;
 import org.vgcs.assignment.restservice.VehicleService;
 import org.vgcs.assignment.restservice.VehicleServicesService;
+import org.vgcs.assignment.restservice.dto.VehicleDTO;
 import org.vgcs.assignment.restservice.dto.VehicleInfoResponseDTO;
-import org.vgcs.assignment.restservice.dto.VehicleResponseDTO;
 import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
 import org.vgcs.assignment.restservice.exception.RestCallException;
+
+import java.util.List;
 
 
 public class DtoFrom {
 
-    public static DtoWrapper<VehicleResponseDTO> vehicleService(VehicleService vehicleService) {
-        DtoWrapper<VehicleResponseDTO> responseWrapper = new DtoWrapper<>();
+    public static DtoWrapper<List<VehicleDTO>> vehicleService(VehicleService vehicleService) {
+        DtoWrapper<List<VehicleDTO>> responseWrapper = new DtoWrapper<>();
 
-        VehicleResponseDTO vehicleResponseDto = null;
+        List<VehicleDTO> vehicleResponseDto = null;
         String errorMessage = "";
         try {
-            vehicleResponseDto = vehicleService.getVehicles();
+            vehicleResponseDto = Lists.newArrayList(vehicleService.getVehicles());
         } catch (RestCallException ex) {
             errorMessage = ex.getErrorCode() + ":" + ex.getMessage() + ":" + ex.getResourceId();
         }

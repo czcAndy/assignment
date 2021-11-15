@@ -1,12 +1,15 @@
 package org.vgcs.assignment.restservice.impl;
 
 import org.springframework.http.HttpStatus;
-import org.vgcs.assignment.restservice.dto.VehicleResponseDTO;
+import org.vgcs.assignment.restservice.dto.VehicleDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.vgcs.assignment.restservice.VehicleService;
+import org.vgcs.assignment.restservice.dto.VehicleResponseDTO;
 import org.vgcs.assignment.restservice.exception.RestCallException;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class VehicleServiceImpl implements VehicleService {
@@ -18,7 +21,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public VehicleResponseDTO getVehicles() {
+    public List<VehicleDTO> getVehicles() {
         return webClient
                 .get()
                 .uri("/vehicle/list/")
@@ -27,6 +30,7 @@ public class VehicleServiceImpl implements VehicleService {
                         .bodyToMono(String.class)
                         .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode()))))
                 .bodyToMono(VehicleResponseDTO.class)
+                .map(vehicleResponseDTO -> vehicleResponseDTO.vehicles())
                 .block();
     }
 }

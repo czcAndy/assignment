@@ -1,4 +1,4 @@
-package org.vgcs.assignment.configuration;
+package org.vgcs.assignment.graphql.configuration;
 
 import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLScalarType;

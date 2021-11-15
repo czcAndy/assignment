@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
-import org.vgcs.assignment.restservice.model.Service;
+import org.vgcs.assignment.restservice.dto.ServiceDTO;
 import org.vgcs.assignment.restservice.impl.VehicleServicesServiceImpl;
 
 import java.io.IOException;
@@ -50,8 +50,8 @@ class VehicleServicesServiceMockTest {
     void getVehicleServicesResponseDTO_200() throws Exception {
         VehicleServicesResponseDTO vehicleServicesResponseMock = new VehicleServicesResponseDTO("ACTIVE",
                 List.of(
-                        new Service("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
-                        new Service("FuelMeasurement", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
+                        new ServiceDTO("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
+                        new ServiceDTO("FuelMeasurement", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
 
         mockWebServer.enqueue(new MockResponse()
                 .setBody(objectMapper.writeValueAsString(vehicleServicesResponseMock))

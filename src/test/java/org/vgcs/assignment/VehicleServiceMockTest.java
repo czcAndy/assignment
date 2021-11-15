@@ -10,8 +10,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.vgcs.assignment.restservice.dto.VehicleDTO;
 import org.vgcs.assignment.restservice.dto.VehicleResponseDTO;
-import org.vgcs.assignment.restservice.model.Vehicle;
 import org.vgcs.assignment.restservice.VehicleService;
 
 import java.io.IOException;
@@ -49,22 +49,22 @@ class VehicleServiceMockTest {
     void getVehicles_200() throws Exception {
         VehicleResponseDTO vehicleResponseMock = new VehicleResponseDTO(
                 List.of(
-                        new Vehicle("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
-                        new Vehicle("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
+                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
+                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
                 ));
 
         mockWebServer.enqueue(new MockResponse()
                 .setBody(objectMapper.writeValueAsString(vehicleResponseMock))
                 .addHeader("Content-Type", "application/json"));
 
-        VehicleResponseDTO vehicleResponseMono = vehicleService
+        List<VehicleDTO> vehicleResponseMono = vehicleService
                 .getVehicles();
 
-        assert (vehicleResponseMono.vehicles().get(0).id().equals("bd45a676-0d0e-48b4-9693-e8196eb7fcbf"));
-        assert (vehicleResponseMono.vehicles().get(0).name().equals("big truck"));
+        assert (vehicleResponseMono.get(0).id().equals("bd45a676-0d0e-48b4-9693-e8196eb7fcbf"));
+        assert (vehicleResponseMono.get(0).name().equals("big truck"));
 
-        assert (vehicleResponseMono.vehicles().get(1).id().equals("2337d25f-8917-4e26-920f-ddbe9ba063d6"));
-        assert (vehicleResponseMono.vehicles().get(1).name().equals("small truck"));
+        assert (vehicleResponseMono.get(1).id().equals("2337d25f-8917-4e26-920f-ddbe9ba063d6"));
+        assert (vehicleResponseMono.get(1).name().equals("small truck"));
     }
 
     @Test
