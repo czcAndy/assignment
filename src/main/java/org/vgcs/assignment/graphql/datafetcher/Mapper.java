@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Mapper {
 
-    public static Vehicle from(VehicleDTO obj) {
+    public static Vehicle fromVehicleDto(VehicleDTO obj) {
         if (obj == null)
             return null;
 
@@ -25,7 +25,8 @@ public class Mapper {
 
         return v;
     }
-    public static VehicleInfo from(VehicleInfoResponseDTO obj) {
+
+    public static VehicleInfo fromVehicleInfoResponseDto(VehicleInfoResponseDTO obj) {
         if (obj == null)
             return null;
 
@@ -41,7 +42,7 @@ public class Mapper {
         return vi;
     }
 
-    public static VehicleServices from(VehicleServicesResponseDTO obj) {
+    public static VehicleServices fromVehiclesServicesResponseDTO(VehicleServicesResponseDTO obj) {
         if (obj == null)
             return null;
 
@@ -50,16 +51,25 @@ public class Mapper {
 
         List<Service> services = List.of();
 
-        if(obj.services() != null)
-            services =  obj.services().stream()
-                .map(sDto -> new Service(sDto.serviceName(), sDto.status(),
-                        LocalDateTime.parse(sDto.lastUpdate(),
-                                DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("Europe/Stockholm")))))
-                .toList();
+        if (obj.services() != null)
+            services = obj.services().stream()
+                    .map(sDto -> new Service(sDto.serviceName(), sDto.status(),
+                            LocalDateTime.parse(sDto.lastUpdate(),
+                                    DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("Europe/Stockholm")))))
+                    .toList();
 
         vs.setServices(services);
         return vs;
     }
 
 
+    public static <T, D> T fromGeneric(D obj) {
+        if (obj instanceof VehicleDTO)
+            return (T) fromVehicleDto((VehicleDTO) obj);
+        if (obj instanceof VehicleInfoResponseDTO)
+            return (T) fromVehicleInfoResponseDto((VehicleInfoResponseDTO) obj);
+        if (obj instanceof VehicleServicesResponseDTO)
+            return (T) fromVehiclesServicesResponseDTO((VehicleServicesResponseDTO) obj);
+        return null;
+    }
 }

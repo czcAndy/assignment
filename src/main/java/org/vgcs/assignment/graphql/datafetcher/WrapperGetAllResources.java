@@ -1,5 +1,7 @@
 package org.vgcs.assignment.graphql.datafetcher;
 
-public interface WrapperGetAllResources<T, R>  {
-    DtoWrapper<R> getAll(T service);
+import java.util.List;
+
+public interface WrapperGetAllResources<T, S>  {
+    DtoWrapper<List<T>> getAll(S service);
 }

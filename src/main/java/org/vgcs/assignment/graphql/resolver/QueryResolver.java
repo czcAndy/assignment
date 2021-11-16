@@ -3,11 +3,10 @@ package org.vgcs.assignment.graphql.resolver;
 import graphql.execution.DataFetcherResult;
 import graphql.kickstart.execution.error.GenericGraphQLError;
 import graphql.kickstart.tools.GraphQLQueryResolver;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.vgcs.assignment.graphql.datafetcher.WrapperGetAllResources;
-import org.vgcs.assignment.graphql.datafetcher.WrapperGetResourceById;
-import org.vgcs.assignment.graphql.datafetcher.WrapperGetResourcesByProperties;
+import org.vgcs.assignment.graphql.datafetcher.WrapperGetResource;
+import org.vgcs.assignment.graphql.datafetcher.WrapperGetResourcesByReflection;
 import org.vgcs.assignment.graphql.model.Vehicle;
 import org.vgcs.assignment.graphql.model.VehicleComplete;
 import org.vgcs.assignment.graphql.model.VehicleServices;
@@ -25,32 +24,34 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class QueryResolver implements GraphQLQueryResolver {
 
-    private final VehicleService vehicleService;
     private final VehicleServicesService vehicleServicesService;
-    private final VehicleRepo vehicleRepo;
     private final VehicleServicesRepo vehicleServicesRepo;
-    private final WrapperGetAllResources wrapperAllVehiclesRest;
-    private final WrapperGetResourceById wrapperVehicleServiceRest;
-    private final WrapperGetResourceById wrapperVehiclesWithPartialNames;
-    private final WrapperGetResourcesByProperties wrapperServicesByNameAndStatus;
+    private final VehicleService vehicleService;
+    private final VehicleRepo vehicleRepo;
 
-    public QueryResolver(VehicleService vehicleService,
-                         VehicleServicesService vehicleServicesService,
-                         VehicleRepo vehicleRepo,
+    private final WrapperGetAllResources<Vehicle, VehicleService> vehicleServiceWrapper;
+    private final WrapperGetResource<VehicleServices, VehicleServicesService, String> vehicleServicesServiceWrapper;
+    private final WrapperGetResourcesByReflection<Vehicle, VehicleRepo> vehicleRepoWrapper;
+    private final WrapperGetResourcesByReflection<VehicleServices, VehicleServicesRepo> vehicleServicesRepoWrapper;
+
+    public QueryResolver(VehicleServicesService vehicleServicesService,
                          VehicleServicesRepo vehicleServicesRepo,
-                         @Qualifier("restWrapper_getAllVehicles") WrapperGetAllResources wrapperAllVehiclesRest,
-                         @Qualifier("restWrapper_getVehicleServices") WrapperGetResourceById wrapperVehicleServiceRest,
-                         @Qualifier("mongoWrapper_getVehiclePartialName") WrapperGetResourceById wrapperVehiclesWithPartialNames,
-                         @Qualifier("mongoWrapper_serviceFromProperties") WrapperGetResourcesByProperties wrapperServicesByNameAndStatus) {
-        this.vehicleService = vehicleService;
+                         VehicleService vehicleService,
+                         VehicleRepo vehicleRepo,
+                         WrapperGetAllResources<Vehicle, VehicleService> vehicleServiceWrapper,
+                         WrapperGetResource<VehicleServices, VehicleServicesService, String> vehicleServicesServiceWrapper,
+                         WrapperGetResourcesByReflection<Vehicle, VehicleRepo> vehicleRepoWrapper,
+                         WrapperGetResourcesByReflection<VehicleServices, VehicleServicesRepo> vehicleServicesRepoWrapper) {
         this.vehicleServicesService = vehicleServicesService;
-        this.vehicleRepo = vehicleRepo;
         this.vehicleServicesRepo = vehicleServicesRepo;
-        this.wrapperAllVehiclesRest = wrapperAllVehiclesRest;
-        this.wrapperVehicleServiceRest = wrapperVehicleServiceRest;
-        this.wrapperVehiclesWithPartialNames = wrapperVehiclesWithPartialNames;
-        this.wrapperServicesByNameAndStatus = wrapperServicesByNameAndStatus;
+        this.vehicleService = vehicleService;
+        this.vehicleRepo = vehicleRepo;
+        this.vehicleServiceWrapper = vehicleServiceWrapper;
+        this.vehicleServicesServiceWrapper = vehicleServicesServiceWrapper;
+        this.vehicleRepoWrapper = vehicleRepoWrapper;
+        this.vehicleServicesRepoWrapper = vehicleServicesRepoWrapper;
     }
+
 
     public VehicleComplete query(String id) {
         VehicleComplete vehicleComplete = new VehicleComplete();
@@ -61,9 +62,9 @@ public class QueryResolver implements GraphQLQueryResolver {
     public CompletableFuture<DataFetcherResult<List<VehicleComplete>>> queryByPartialName(String name) {
         return CompletableFuture.supplyAsync(() -> {
             var result = DataFetcherResult.<List<VehicleComplete>>newResult();
-            var mongoWrapper =  wrapperVehiclesWithPartialNames.get(vehicleRepo, name);
-            if (mongoWrapper.hasData() && !mongoWrapper.hasError()) {
-                var vehicleList = (List<Vehicle>)mongoWrapper.getData();
+            var resultMongo =  vehicleRepoWrapper.getAll(vehicleRepo,"findAllByNameContains", name);
+            if (resultMongo.hasData() && !resultMongo.hasError()) {
+                var vehicleList = resultMongo.getData();
                 var vehicleCompleteList = vehicleList.stream().map(v -> {
                     VehicleComplete vh = new VehicleComplete();
                     vh.setId(v.getId());
@@ -72,7 +73,7 @@ public class QueryResolver implements GraphQLQueryResolver {
 
                 result.data(vehicleCompleteList);
             } else {
-                var wrapper = wrapperAllVehiclesRest.getAll(vehicleService);
+                var wrapper = vehicleServiceWrapper.getAll(vehicleService);
                 if (wrapper.hasData()){
                     var vehicleList = (List<Vehicle>)wrapper.getData();
                     var vehicleCompleteList = vehicleList.stream()
@@ -98,10 +99,10 @@ public class QueryResolver implements GraphQLQueryResolver {
     public CompletableFuture<DataFetcherResult<List<VehicleComplete>>> queryByServiceStatus(String serviceName, String serviceStatus) {
         return CompletableFuture.supplyAsync(() -> {
             var result = DataFetcherResult.<List<VehicleComplete>>newResult();
-            var mongoWrapper =  wrapperServicesByNameAndStatus.get(vehicleServicesRepo, serviceName, serviceStatus);
+            var resultMongo =  vehicleServicesRepoWrapper.getAll(vehicleServicesRepo,"findServicesByNameAndStatus", serviceName, serviceStatus);
 
-            if (mongoWrapper.hasData() && !mongoWrapper.hasError()) {
-                var vehicleList = (List<VehicleServices>)mongoWrapper.getData();
+            if (resultMongo.hasData() && !resultMongo.hasError()) {
+                var vehicleList = resultMongo.getData();
                 var vehicleCompleteList = vehicleList.stream().map(v -> {
                     VehicleComplete vh = new VehicleComplete();
                     vh.setId(v.getId());
@@ -110,12 +111,12 @@ public class QueryResolver implements GraphQLQueryResolver {
 
                 result.data(vehicleCompleteList);
             } else {
-                var restWrapper = wrapperAllVehiclesRest.getAll(vehicleService);
-                if (restWrapper.hasData()) {
-                    var vehicleDto = (List<Vehicle>) restWrapper.getData();
+                var restWrapperVehicles = vehicleServiceWrapper.getAll(vehicleService);
+                if (restWrapperVehicles.hasData()) {
+                    var vehicleDto = (List<Vehicle>) restWrapperVehicles.getData();
                     var vehicles = vehicleDto.stream()
                             .filter(v -> {
-                                var vehicleServicesDTOWrapper = wrapperVehicleServiceRest.get(vehicleServicesService, v.getId());
+                                var vehicleServicesDTOWrapper = vehicleServicesServiceWrapper.get(vehicleServicesService, v.getId());
                                 if (vehicleServicesDTOWrapper.hasError()) {
                                     result.error(new GenericGraphQLError(vehicleServicesDTOWrapper.getErrorMessage()));
                                 }
