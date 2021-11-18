@@ -4,9 +4,7 @@ import org.vgcs.assignment.graphql.model.Service;
 import org.vgcs.assignment.graphql.model.Vehicle;
 import org.vgcs.assignment.graphql.model.VehicleInfo;
 import org.vgcs.assignment.graphql.model.VehicleServices;
-import org.vgcs.assignment.restservice.dto.VehicleDTO;
-import org.vgcs.assignment.restservice.dto.VehicleInfoResponseDTO;
-import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
+import org.vgcs.assignment.restservice.dto.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,33 +24,35 @@ public class Mapper {
         return v;
     }
 
-    public static VehicleInfo fromVehicleInfoResponseDto(VehicleInfoResponseDTO obj) {
+    public static VehicleInfo fromVehicleInfoResponseWithIdDto(VehicleInfoResponseWithIdDTO obj) {
         if (obj == null)
             return null;
 
         VehicleInfo vi = new VehicleInfo();
-        vi.setMsidn(obj.msidn());
-        vi.setEngineStatus(obj.engineStatus());
-        vi.setFleet(obj.fleet());
-        vi.setBrand(obj.brand());
-        vi.setCountryOfOperation(obj.countryOfOperation());
-        vi.setChassisNumber(obj.chassisNumber());
-        vi.setChassisSeries(obj.chassisSeries());
+        vi.setId(obj.id());
+        vi.setMsidn(obj.vehicleInfoResponseDTO().msidn());
+        vi.setEngineStatus(obj.vehicleInfoResponseDTO().engineStatus());
+        vi.setFleet(obj.vehicleInfoResponseDTO().fleet());
+        vi.setBrand(obj.vehicleInfoResponseDTO().brand());
+        vi.setCountryOfOperation(obj.vehicleInfoResponseDTO().countryOfOperation());
+        vi.setChassisNumber(obj.vehicleInfoResponseDTO().chassisNumber());
+        vi.setChassisSeries(obj.vehicleInfoResponseDTO().chassisSeries());
 
         return vi;
     }
 
-    public static VehicleServices fromVehiclesServicesResponseDTO(VehicleServicesResponseDTO obj) {
+    public static VehicleServices fromVehiclesServicesResponseWithIdDTO(VehicleServicesResponseWithIdDTO obj) {
         if (obj == null)
             return null;
 
         VehicleServices vs = new VehicleServices();
-        vs.setCommunicationStatus(obj.communicationStatus());
+        vs.setId(obj.id());
+        vs.setCommunicationStatus(obj.vehicleServicesResponseDTO().communicationStatus());
 
         List<Service> services = List.of();
 
-        if (obj.services() != null)
-            services = obj.services().stream()
+        if (obj.vehicleServicesResponseDTO().services() != null)
+            services = obj.vehicleServicesResponseDTO().services().stream()
                     .map(sDto -> new Service(sDto.serviceName(), sDto.status(),
                             LocalDateTime.parse(sDto.lastUpdate(),
                                     DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("Europe/Stockholm")))))
@@ -66,10 +66,10 @@ public class Mapper {
     public static <T, D> T fromGeneric(D obj) {
         if (obj instanceof VehicleDTO)
             return (T) fromVehicleDto((VehicleDTO) obj);
-        if (obj instanceof VehicleInfoResponseDTO)
-            return (T) fromVehicleInfoResponseDto((VehicleInfoResponseDTO) obj);
-        if (obj instanceof VehicleServicesResponseDTO)
-            return (T) fromVehiclesServicesResponseDTO((VehicleServicesResponseDTO) obj);
+        if (obj instanceof VehicleInfoResponseWithIdDTO)
+            return (T) fromVehicleInfoResponseWithIdDto((VehicleInfoResponseWithIdDTO) obj);
+        if (obj instanceof VehicleServicesResponseWithIdDTO)
+            return (T) fromVehiclesServicesResponseWithIdDTO((VehicleServicesResponseWithIdDTO) obj);
         return null;
     }
 }

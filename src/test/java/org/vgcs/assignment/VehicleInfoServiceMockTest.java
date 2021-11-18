@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.vgcs.assignment.restservice.dto.VehicleInfoResponseDTO;
 import org.vgcs.assignment.restservice.VehicleInfoService;
+import org.vgcs.assignment.restservice.dto.VehicleInfoResponseWithIdDTO;
 
 import java.io.IOException;
 
@@ -51,16 +52,16 @@ class VehicleInfoServiceMockTest {
                 .setBody(objectMapper.writeValueAsString(vehicleResponseMock))
                 .addHeader("Content-Type", "application/json"));
 
-        VehicleInfoResponseDTO vehicleResponseMono = vehicleInfoService
+        VehicleInfoResponseWithIdDTO vehicleResponseMono = vehicleInfoService
                 .get("id");
 
-        assert (vehicleResponseMono.msidn().equals("+4678625847"));
-        assert (vehicleResponseMono.engineStatus().equals("OK"));
-        assert (vehicleResponseMono.fleet().equals("Thor's fleet"));
-        assert (vehicleResponseMono.brand().equals("Volvo Construction Equipment"));
-        assert (vehicleResponseMono.countryOfOperation().equals("Japan"));
-        assert (vehicleResponseMono.chassisNumber().equals("000543"));
-        assert (vehicleResponseMono.chassisSeries().equals("VCE"));
+        assert (vehicleResponseMono.vehicleInfoResponseDTO().msidn().equals("+4678625847"));
+        assert (vehicleResponseMono.vehicleInfoResponseDTO().engineStatus().equals("OK"));
+        assert (vehicleResponseMono.vehicleInfoResponseDTO().fleet().equals("Thor's fleet"));
+        assert (vehicleResponseMono.vehicleInfoResponseDTO().brand().equals("Volvo Construction Equipment"));
+        assert (vehicleResponseMono.vehicleInfoResponseDTO().countryOfOperation().equals("Japan"));
+        assert (vehicleResponseMono.vehicleInfoResponseDTO().chassisNumber().equals("000543"));
+        assert (vehicleResponseMono.vehicleInfoResponseDTO().chassisSeries().equals("VCE"));
     }
 
     @Test

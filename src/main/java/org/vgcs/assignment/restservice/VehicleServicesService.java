@@ -1,8 +1,6 @@
 package org.vgcs.assignment.restservice;
 
-import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
-import org.vgcs.assignment.restservice.exception.RestCallException;
+import org.vgcs.assignment.restservice.dto.VehicleServicesResponseWithIdDTO;
 
-public interface VehicleServicesService extends GetService<VehicleServicesResponseDTO, String> {
-    VehicleServicesResponseDTO get(String id) throws RestCallException;
+public interface VehicleServicesService extends GetService<VehicleServicesResponseWithIdDTO, String>{
 }

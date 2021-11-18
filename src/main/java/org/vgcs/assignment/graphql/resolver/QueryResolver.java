@@ -75,7 +75,7 @@ public class QueryResolver implements GraphQLQueryResolver {
             } else {
                 var wrapper = vehicleServiceWrapper.getAll(vehicleService);
                 if (wrapper.hasData()){
-                    var vehicleList = (List<Vehicle>)wrapper.getData();
+                    var vehicleList = wrapper.getData();
                     var vehicleCompleteList = vehicleList.stream()
                             .filter(v -> Objects.nonNull(v.getName()) && v.getName().contains(name)).map(v -> {
                                 VehicleComplete vh = new VehicleComplete();
@@ -113,28 +113,25 @@ public class QueryResolver implements GraphQLQueryResolver {
             } else {
                 var restWrapperVehicles = vehicleServiceWrapper.getAll(vehicleService);
                 if (restWrapperVehicles.hasData()) {
-                    var vehicleDto = (List<Vehicle>) restWrapperVehicles.getData();
-                    var vehicles = vehicleDto.stream()
-                            .filter(v -> {
-                                var vehicleServicesDTOWrapper = vehicleServicesServiceWrapper.get(vehicleServicesService, v.getId());
-                                if (vehicleServicesDTOWrapper.hasError()) {
-                                    result.error(new GenericGraphQLError(vehicleServicesDTOWrapper.getErrorMessage()));
-                                }
-                                if (vehicleServicesDTOWrapper.hasData()) {
-                                    var vehicleServicesDto = (VehicleServices) vehicleServicesDTOWrapper.getData();
-                                    if (vehicleServicesDto != null)
-                                        return vehicleServicesDto.getServices().stream()
-                                                .anyMatch(s -> s.getServiceName().equals(serviceName) && s.getStatus().equals(serviceStatus));
-                                }
-                                return false;
-                            })
-                            .map(v -> {
-                                VehicleComplete vehicleComplete = new VehicleComplete();
-                                vehicleComplete.setId(v.getId());
-                                return vehicleComplete;
-                            }).toList();
+                    var vehicleIds = restWrapperVehicles.getData().stream().map(Vehicle::getId).toList();
+                    var vehicleServicesDTOWrapper = vehicleServicesServiceWrapper.getAsync(vehicleServicesService, vehicleIds);
+                    if (vehicleServicesDTOWrapper.hasData()) {
+                        var vehicles = vehicleServicesDTOWrapper.getData().stream()
+                                .filter(service -> service.getServices().stream()
+                                        .anyMatch(s -> s.getServiceName().equals(serviceName) && s.getStatus().equals(serviceStatus))
+                                )
+                                .map(s -> {
+                                    VehicleComplete vehicleComplete = new VehicleComplete();
+                                    vehicleComplete.setId(s.getId());
+                                    return vehicleComplete;
+                                }).toList();
 
-                    result.data(vehicles);
+                        result.data(vehicles);
+                    }
+
+                    if (vehicleServicesDTOWrapper.hasError()) {
+                        result.error(new GenericGraphQLError(vehicleServicesDTOWrapper.getErrorMessage()));
+                    }
                 }
             }
             return result.build();

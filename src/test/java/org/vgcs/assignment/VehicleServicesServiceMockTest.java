@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.vgcs.assignment.restservice.dto.VehicleServicesResponseDTO;
 import org.vgcs.assignment.restservice.dto.ServiceDTO;
+import org.vgcs.assignment.restservice.dto.VehicleServicesResponseWithIdDTO;
 import org.vgcs.assignment.restservice.impl.VehicleServicesServiceImpl;
 
 import java.io.IOException;
@@ -57,18 +58,18 @@ class VehicleServicesServiceMockTest {
                 .setBody(objectMapper.writeValueAsString(vehicleServicesResponseMock))
                 .addHeader("Content-Type", "application/json"));
 
-        VehicleServicesResponseDTO vehicleResponseMono = vehicleServicesService
+        VehicleServicesResponseWithIdDTO vehicleResponseMono = vehicleServicesService
                 .get("id");
 
-        assert (vehicleResponseMono.communicationStatus().equals("ACTIVE"));
+        assert (vehicleResponseMono.vehicleServicesResponseDTO().communicationStatus().equals("ACTIVE"));
 
-        assert (vehicleResponseMono.services().get(0).serviceName().equals("GPS"));
-        assert (vehicleResponseMono.services().get(0).status().equals("ACTIVE"));
-        assert (vehicleResponseMono.services().get(0).lastUpdate().equals(Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))));
+        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(0).serviceName().equals("GPS"));
+        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(0).status().equals("ACTIVE"));
+        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(0).lastUpdate().equals(Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))));
 
-        assert (vehicleResponseMono.services().get(1).serviceName().equals("FuelMeasurement"));
-        assert (vehicleResponseMono.services().get(1).status().equals("DEACTIVATED"));
-        assert (vehicleResponseMono.services().get(1).lastUpdate().equals(Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))));
+        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(1).serviceName().equals("FuelMeasurement"));
+        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(1).status().equals("DEACTIVATED"));
+        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(1).lastUpdate().equals(Date.from(Instant.parse("2019-01-01T09:23:05+01:00"))));
     }
 
     @Test
