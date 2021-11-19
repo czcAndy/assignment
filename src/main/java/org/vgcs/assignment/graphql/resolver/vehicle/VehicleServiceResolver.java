@@ -1,4 +1,4 @@
-package org.vgcs.assignment.graphql.resolver;
+package org.vgcs.assignment.graphql.resolver.vehicle;
 
 import graphql.execution.DataFetcherResult;
 import graphql.kickstart.execution.error.GenericGraphQLError;
@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Component
 public class VehicleServiceResolver implements GraphQLResolver<VehicleComplete> {
+    private static final String FIND_BY_ID = "findById";
     private final VehicleServicesService vehicleServicesService;
     private final VehicleServicesRepo vehicleServicesRepo;
     private final WrapperGetResourcesByReflection<VehicleServices, VehicleServicesRepo> mongoWrapper;
@@ -35,13 +36,13 @@ public class VehicleServiceResolver implements GraphQLResolver<VehicleComplete> 
     public CompletableFuture<DataFetcherResult<VehicleServices>> vehicleServices(VehicleComplete vehicleComplete) {
         return CompletableFuture.supplyAsync(() -> {
             var result = DataFetcherResult.<VehicleServices>newResult();
-            var resultMongo = mongoWrapper.get(vehicleServicesRepo,"findById", vehicleComplete.getId());
+            var resultMongo = mongoWrapper.get(vehicleServicesRepo, FIND_BY_ID, vehicleComplete.getId());
             if(resultMongo.hasData() && !resultMongo.hasError()) {
                 result.data(resultMongo.getData());
             } else {
                 var resultRest = restWrapper.get(vehicleServicesService, vehicleComplete.getId());
                 if(resultRest.hasData()) {
-                    var vehicleServices = (VehicleServices)resultRest.getData();
+                    var vehicleServices = resultRest.getData();
                     vehicleServices.setId(vehicleComplete.getId());
                     vehicleServicesRepo.save(vehicleServices);
                     result.data(vehicleServices);
