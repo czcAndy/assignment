@@ -48,24 +48,16 @@ public class VehicleServicesServiceImpl implements VehicleServicesService {
                         webClient.get()
                                 .uri("/vehicle/services?id={id}", id)
                                 .retrieve()
-                                .onStatus(HttpStatus::isError, clientResponse -> clientResponse
-                                        .bodyToMono(String.class)
-                                        .defaultIfEmpty(ExceptionMessages.NO_BODY_MESSAGE)
-                                        .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id))))
                                 .bodyToMono(VehicleServicesResponseDTO.class)
                                 .onErrorResume(e -> Mono.empty())
                                 .map(vehicleServicesResponseDTO -> new VehicleServicesResponseWithIdDTO(id, vehicleServicesResponseDTO)))
                 .doOnComplete(() -> future.complete(res))
-                .subscribe(response -> {
-                    if(res != null)
-                        res.add(response);
-                });
-
+                .subscribe(res::add);
 
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException ex) {
-            return null;
+            return List.of();
         }
 
     }

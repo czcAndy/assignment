@@ -25,7 +25,7 @@ public class VehicleInfoServiceImpl implements VehicleInfoService {
     }
 
     @Override
-    public VehicleInfoResponseWithIdDTO get(String id)  {
+    public VehicleInfoResponseWithIdDTO get(String id) {
         return webClient
                 .get()
                 .uri("/vehicle/info?id={id}", id)
@@ -47,25 +47,18 @@ public class VehicleInfoServiceImpl implements VehicleInfoService {
         Flux.fromIterable(ids)
                 .flatMap(id ->
                         webClient.get()
-                            .uri("/vehicle/service?id={id}", id)
-                            .retrieve()
-                            .onStatus(HttpStatus::isError, clientResponse -> clientResponse
-                                    .bodyToMono(String.class)
-                                    .defaultIfEmpty(ExceptionMessages.NO_BODY_MESSAGE)
-                                    .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id))))
-                            .bodyToMono(VehicleInfoResponseDTO.class)
+                                .uri("/vehicle/service?id={id}", id)
+                                .retrieve()
+                                .bodyToMono(VehicleInfoResponseDTO.class)
                                 .onErrorResume(e -> Mono.empty())
                                 .map(vehicleInfoResponseDTO -> new VehicleInfoResponseWithIdDTO(id, vehicleInfoResponseDTO))
                 )
                 .doOnComplete(() -> future.complete(res))
-                .subscribe(response -> {
-                    if(res != null)
-                        res.add(response);
-                });
+                .subscribe(res::add);
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException ex) {
-            return null;
+            return List.of();
         }
     }
 }

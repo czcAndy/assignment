@@ -57,23 +57,16 @@ public class VehicleServiceImpl implements VehicleService {
                         webClient.get()
                                 .uri("/vehicle/list/")
                                 .retrieve()
-                                .onStatus(HttpStatus::isError, clientResponse -> clientResponse
-                                        .bodyToMono(String.class)
-                                        .defaultIfEmpty(ExceptionMessages.NO_BODY_MESSAGE)
-                                        .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id))))
                                 .bodyToMono(VehicleDTO.class)
                                 .onErrorResume(e -> Mono.empty()))
                 .doOnComplete(() -> future.complete(res))
-                .subscribe(response -> {
-                    if(res != null)
-                        res.add(response);
-                });
+                .subscribe(res::add);
 
 
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException ex) {
-            return null;
+            return List.of();
         }
     }
 }
