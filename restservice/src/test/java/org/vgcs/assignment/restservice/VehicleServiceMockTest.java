@@ -122,27 +122,70 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
     }
 
     @Override
-    public void test_getResourceAsync_200() {
+    public void test_getResourceAsync_200() throws Exception {
+        VehicleResponseDTO body = new VehicleResponseDTO(
+                List.of(
+                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
+                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
+                ));
 
+        VehicleResponseDTO body2 = new VehicleResponseDTO(
+                List.of(
+                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
+                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
+                ));
+        super.enqueueMockResponse(body, 200);
+        super.enqueueMockResponse(body, 200);
+
+        var response = vehicleService.getAsync(List.of("1","2"));
+
+        assert(response.size() == 2);
+        assert (response.stream().anyMatch(r -> r.equals(body)));
+        assert (response.stream().anyMatch(r -> r.equals(body2)));
     }
 
     @Override
-    public void test_getResourceAsync_400() {
+    public void test_getResourceAsync_when_at_least_one_200() throws Exception {
+        VehicleResponseDTO body = new VehicleResponseDTO(
+                List.of(
+                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
+                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
+                ));
 
+        VehicleResponseDTO body2 = new VehicleResponseDTO(
+                List.of(
+                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
+                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
+                ));
+        super.enqueueMockResponse(body, 200);
+        super.enqueueMockResponse(body, 400);
+
+        var response = vehicleService.getAsync(List.of("1","2"));
+
+        assert(response.size() == 1);
+        assert (response.stream().anyMatch(r -> r.equals(body)));
+        assert (response.stream().noneMatch(r -> r.equals(body2)));
     }
 
     @Override
-    public void test_getResourceAsync_401() {
+    public void test_getResourceAsync_when_none_200() throws Exception {
+        VehicleResponseDTO body = new VehicleResponseDTO(
+                List.of(
+                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
+                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
+                ));
 
+        VehicleResponseDTO body2 = new VehicleResponseDTO(
+                List.of(
+                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
+                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
+                ));
+        super.enqueueMockResponse(body, 400);
+        super.enqueueMockResponse(body, 400);
+
+        var response = vehicleService.getAsync(List.of("1","2"));
+
+        assert(response.isEmpty());
     }
 
-    @Override
-    public void test_getResourceAsync_404() {
-
-    }
-
-    @Override
-    public void test_getResourceAsync_500() {
-
-    }
 }

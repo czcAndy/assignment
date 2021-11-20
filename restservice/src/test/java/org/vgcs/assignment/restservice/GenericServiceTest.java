@@ -40,7 +40,8 @@ abstract class GenericServiceTest<T, S extends GetService<T, String>> implements
             }
         }
 
-
         mockWebServer.enqueue(response);
     }
+
+
 }

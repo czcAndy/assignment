@@ -1,5 +1,7 @@
 package org.vgcs.assignment.restservice;
 
+import org.junit.jupiter.api.Test;
+
 interface ServiceTestSpecifications {
     void test_getResource_200() throws Exception;
     void test_getResource_400() throws Exception;
@@ -8,9 +10,7 @@ interface ServiceTestSpecifications {
     void test_getResource_500() throws Exception;
     void test_getResource_nullBody() throws Exception;
 
-    void test_getResourceAsync_200();
-    void test_getResourceAsync_400();
-    void test_getResourceAsync_401();
-    void test_getResourceAsync_404();
-    void test_getResourceAsync_500();
+    void test_getResourceAsync_200() throws Exception;
+    void test_getResourceAsync_when_at_least_one_200() throws Exception;
+    void test_getResourceAsync_when_none_200() throws Exception;
 }

@@ -54,6 +54,7 @@ public class VehicleInfoServiceImpl implements VehicleInfoService {
                                     .defaultIfEmpty(ExceptionMessages.NO_BODY_MESSAGE)
                                     .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id))))
                             .bodyToMono(VehicleInfoResponseDTO.class)
+                                .onErrorResume(e -> Mono.empty())
                                 .map(vehicleInfoResponseDTO -> new VehicleInfoResponseWithIdDTO(id, vehicleInfoResponseDTO))
                 )
                 .doOnComplete(() -> future.complete(res))

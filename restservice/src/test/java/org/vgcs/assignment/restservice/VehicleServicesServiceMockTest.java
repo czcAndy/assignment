@@ -1,6 +1,5 @@
 package org.vgcs.assignment.restservice;
 
-import okhttp3.mockwebserver.MockResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -99,27 +98,67 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
     }
 
     @Override
-    public void test_getResourceAsync_200() {
+    @Test
+    public void test_getResourceAsync_200() throws Exception {
+        VehicleServicesResponseDTO body = new VehicleServicesResponseDTO("ACTIVE",
+                List.of(
+                        new ServiceDTO("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
+                        new ServiceDTO("FuelMeasurement", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
 
+        VehicleServicesResponseDTO body2 = new VehicleServicesResponseDTO("ACTIVE",
+                List.of(
+                        new ServiceDTO("GPS", "ERROR", "2019-01-01T09:23:05+01:00"),
+                        new ServiceDTO("rswdl", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
+
+        super.enqueueMockResponse(body, 200);
+        super.enqueueMockResponse(body2, 200);
+
+        var response = vehicleServicesService.getAsync(List.of("1","2"));
+
+        assert(response.size() == 2);
+        assert (response.stream().anyMatch(r -> r.vehicleServicesResponseDTO().equals(body)));
+        assert (response.stream().anyMatch(r -> r.vehicleServicesResponseDTO().equals(body2)));
     }
 
     @Override
-    public void test_getResourceAsync_400() {
+    @Test
+    public void test_getResourceAsync_when_at_least_one_200() throws Exception {
+        VehicleServicesResponseDTO body = new VehicleServicesResponseDTO("ACTIVE",
+                List.of(
+                        new ServiceDTO("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
+                        new ServiceDTO("FuelMeasurement", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
 
+        VehicleServicesResponseDTO body2 = new VehicleServicesResponseDTO("ACTIVE",
+                List.of(
+                        new ServiceDTO("GPS", "ERROR", "2019-01-01T09:23:05+01:00"),
+                        new ServiceDTO("rswdl", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
+
+        super.enqueueMockResponse(body, 200);
+        super.enqueueMockResponse(body2, 400);
+
+        var response = vehicleServicesService.getAsync(List.of("1","2"));
+
+        assert(response.size() == 1);
+        assert (response.stream().anyMatch(r -> r.vehicleServicesResponseDTO().equals(body)));
     }
 
     @Override
-    public void test_getResourceAsync_401() {
+    public void test_getResourceAsync_when_none_200() throws Exception {
+        VehicleServicesResponseDTO body = new VehicleServicesResponseDTO("ACTIVE",
+                List.of(
+                        new ServiceDTO("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
+                        new ServiceDTO("FuelMeasurement", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
 
-    }
+        VehicleServicesResponseDTO body2 = new VehicleServicesResponseDTO("ACTIVE",
+                List.of(
+                        new ServiceDTO("GPS", "ERROR", "2019-01-01T09:23:05+01:00"),
+                        new ServiceDTO("rswdl", "DEACTIVATED", "2019-01-01T09:23:05+01:00")));
 
-    @Override
-    public void test_getResourceAsync_404() {
+        super.enqueueMockResponse(body, 400);
+        super.enqueueMockResponse(body2, 400);
 
-    }
+        var response = vehicleServicesService.getAsync(List.of("1","2"));
 
-    @Override
-    public void test_getResourceAsync_500() {
-
+        assert(response.isEmpty());
     }
 }

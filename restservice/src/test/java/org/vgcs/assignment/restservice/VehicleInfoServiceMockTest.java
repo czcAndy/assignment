@@ -13,6 +13,8 @@ import org.vgcs.assignment.restservice.exception.ExceptionMessages;
 import org.vgcs.assignment.restservice.exception.RestCallException;
 import org.vgcs.assignment.restservice.impl.VehicleInfoServiceImpl;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = {VehicleInfoServiceImpl.class, RestServiceConfig.class})
@@ -100,27 +102,49 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
     }
 
     @Override
-    public void test_getResourceAsync_200() {
+    @Test
+    public void test_getResourceAsync_200() throws Exception {
+        VehicleInfoResponseDTO body = new VehicleInfoResponseDTO("+4678625847", "OK", "Thor's fleet", "Volvo Construction Equipment", "Japan", "000543", "VCE");
+        VehicleInfoResponseDTO body2 = new VehicleInfoResponseDTO("+4635489215", "DANGER", "Thor's fleet", "Volvo Trucks", "Mongolia", "954634", "VT");
 
+        super.enqueueMockResponse(body, 200);
+        super.enqueueMockResponse(body2, 200);
+
+        var response = vehicleInfoService.getAsync(List.of("1","2"));
+
+        assert(response.size() == 2);
+        assert (response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body)));
+        assert (response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body2)));
     }
 
     @Override
-    public void test_getResourceAsync_400() {
+    @Test
+    public void test_getResourceAsync_when_at_least_one_200() throws Exception {
+        VehicleInfoResponseDTO body = new VehicleInfoResponseDTO("+4678625847", "OK", "Thor's fleet", "Volvo Construction Equipment", "Japan", "000543", "VCE");
+        VehicleInfoResponseDTO body2 = new VehicleInfoResponseDTO("+4635489215", "DANGER", "Thor's fleet", "Volvo Trucks", "Mongolia", "954634", "VT");
 
+        super.enqueueMockResponse(body, 200);
+        super.enqueueMockResponse(body2, 400);
+
+        var response = vehicleInfoService.getAsync(List.of("1","2"));
+
+        assert(response.size() == 1);
+        assert (response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body)));
+        assert (response.stream().noneMatch(r -> r.vehicleInfoResponseDTO().equals(body2)));
     }
 
     @Override
-    public void test_getResourceAsync_401() {
+    @Test
+    public void test_getResourceAsync_when_none_200() throws Exception {
+        VehicleInfoResponseDTO body = new VehicleInfoResponseDTO("+4678625847", "OK", "Thor's fleet", "Volvo Construction Equipment", "Japan", "000543", "VCE");
+        VehicleInfoResponseDTO body2 = new VehicleInfoResponseDTO("+4635489215", "DANGER", "Thor's fleet", "Volvo Trucks", "Mongolia", "954634", "VT");
 
+        super.enqueueMockResponse(body, 400);
+        super.enqueueMockResponse(body2, 400);
+
+        var response = vehicleInfoService.getAsync(List.of("1","2"));
+
+        assert(response.isEmpty());
     }
 
-    @Override
-    public void test_getResourceAsync_404() {
-
-    }
-
-    @Override
-    public void test_getResourceAsync_500() {
-
-    }
 }
