@@ -6,6 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.vgcs.assignment.restservice.dto.VehicleInfoResponseDTO;
 import org.vgcs.assignment.restservice.dto.VehicleInfoResponseWithIdDTO;
 import org.vgcs.assignment.restservice.VehicleInfoService;
+import org.vgcs.assignment.restservice.exception.ExceptionMessages;
 import org.vgcs.assignment.restservice.exception.RestCallException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -30,9 +31,9 @@ public class VehicleInfoServiceImpl implements VehicleInfoService {
                 .uri("/vehicle/info?id={id}", id)
                 .retrieve()
                 .onStatus(HttpStatus::isError, clientResponse -> clientResponse
-                    .bodyToMono(String.class)
-                            .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id)))
-                )
+                        .bodyToMono(String.class)
+                        .defaultIfEmpty(ExceptionMessages.NO_BODY_MESSAGE)
+                        .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id))))
                 .bodyToMono(VehicleInfoResponseDTO.class)
                 .map(vehicleInfoResponseDTO -> new VehicleInfoResponseWithIdDTO(id, vehicleInfoResponseDTO))
                 .block();
@@ -50,6 +51,7 @@ public class VehicleInfoServiceImpl implements VehicleInfoService {
                             .retrieve()
                             .onStatus(HttpStatus::isError, clientResponse -> clientResponse
                                     .bodyToMono(String.class)
+                                    .defaultIfEmpty(ExceptionMessages.NO_BODY_MESSAGE)
                                     .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id))))
                             .bodyToMono(VehicleInfoResponseDTO.class)
                                 .map(vehicleInfoResponseDTO -> new VehicleInfoResponseWithIdDTO(id, vehicleInfoResponseDTO))

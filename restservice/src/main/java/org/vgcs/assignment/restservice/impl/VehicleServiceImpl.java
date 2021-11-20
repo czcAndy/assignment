@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.vgcs.assignment.restservice.VehicleService;
 import org.vgcs.assignment.restservice.dto.VehicleResponseDTO;
+import org.vgcs.assignment.restservice.exception.ExceptionMessages;
 import org.vgcs.assignment.restservice.exception.RestCallException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,6 +34,7 @@ public class VehicleServiceImpl implements VehicleService {
                 .retrieve()
                 .onStatus(HttpStatus::isError, clientResponse -> clientResponse
                         .bodyToMono(String.class)
+                        .defaultIfEmpty(ExceptionMessages.NO_BODY_MESSAGE)
                         .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode()))))
                 .bodyToMono(VehicleResponseDTO.class)
                 .map(VehicleResponseDTO::vehicles)
@@ -57,6 +59,7 @@ public class VehicleServiceImpl implements VehicleService {
                                 .retrieve()
                                 .onStatus(HttpStatus::isError, clientResponse -> clientResponse
                                         .bodyToMono(String.class)
+                                        .defaultIfEmpty(ExceptionMessages.NO_BODY_MESSAGE)
                                         .flatMap(error -> Mono.error(new RestCallException(error, clientResponse.rawStatusCode(), id))))
                                 .bodyToMono(VehicleDTO.class)
                                 .onErrorResume(e -> Mono.empty()))

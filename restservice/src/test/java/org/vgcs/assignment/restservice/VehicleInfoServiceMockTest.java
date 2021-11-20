@@ -5,30 +5,31 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.vgcs.assignment.restservice.configuration.RestServiceConfig;
 import org.vgcs.assignment.restservice.dto.VehicleInfoResponseDTO;
 import org.vgcs.assignment.restservice.dto.VehicleInfoResponseWithIdDTO;
+import org.vgcs.assignment.restservice.exception.ExceptionMessages;
+import org.vgcs.assignment.restservice.exception.RestCallException;
 import org.vgcs.assignment.restservice.impl.VehicleInfoServiceImpl;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(value = "classpath:application.test.properties", classes = {VehicleInfoServiceImpl.class, RestServiceConfig.class})
+@SpringBootTest(classes = {VehicleInfoServiceImpl.class, RestServiceConfig.class})
+@TestPropertySource(locations="classpath:application.properties")
+@RunWith(SpringRunner.class)
 class VehicleInfoServiceMockTest {
 
     private static MockWebServer mockWebServer;
     private final ObjectMapper objectMapper;
-
-    @Value("${service.port}")
-    private static int PORT = 1337;
 
     @Autowired
     private VehicleInfoService vehicleInfoService;
@@ -38,9 +39,9 @@ class VehicleInfoServiceMockTest {
     }
 
     @BeforeAll
-    static void setUp() throws IOException {
+    static void setUp(@Value("${service.port}") final int port) throws IOException {
         mockWebServer = new MockWebServer();
-        mockWebServer.start(PORT);
+        mockWebServer.start(port);
     }
 
     @AfterAll
@@ -49,7 +50,7 @@ class VehicleInfoServiceMockTest {
     }
 
     @Test
-    void getVehicleInfoResponseDTO_200() throws Exception {
+    void getVehicleInfo_200() throws Exception {
         VehicleInfoResponseDTO vehicleResponseMock = new VehicleInfoResponseDTO("+4678625847", "OK", "Thor's fleet", "Volvo Construction Equipment", "Japan", "000543", "VCE");
         mockWebServer.enqueue(new MockResponse()
                 .setBody(objectMapper.writeValueAsString(vehicleResponseMock))
@@ -68,69 +69,74 @@ class VehicleInfoServiceMockTest {
     }
 
     @Test
-    void getVehicleInfoResponseDTO_400() {
+    void getVehicleInfo_400() throws RestCallException {
         String message = "reason: Query param id missing from request.";
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "application/json")
                 .setBody(message)
                 .setResponseCode(400));
 
-        Exception exception = assertThrows(Exception.class, () -> vehicleInfoService.get(""));
+        var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get(""));
 
         assert (exception.getMessage().equals(message));
+        assert (exception.getErrorCode() == 400);
+        assert (exception.getResourceId().equals(""));
     }
 
     @Test
-    void getVehicleInfoResponseDTO_404() {
+    void getVehicleInfo_404() throws RestCallException {
         String message = "{}";
 
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "application/json")
                 .setBody(message)
                 .setResponseCode(404));
-        Exception exception = assertThrows(Exception.class, () -> vehicleInfoService.get("id"));
+        var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
         assert (exception.getMessage().equals(message));
+        assert (exception.getErrorCode() == 404);
+        assert (exception.getResourceId().equals("1"));
     }
 
     @Test
-    void getVehicleInfoResponseDTO_401() {
+    void getVehicleInfo_401() throws RestCallException {
         String message = "{}";
 
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "application/json")
                 .setBody(message)
                 .setResponseCode(401));
-        Exception exception = assertThrows(Exception.class, () -> vehicleInfoService.get("id"));
+        var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
         assert (exception.getMessage().equals(message));
+        assert (exception.getErrorCode() == 401);
+        assert (exception.getResourceId().equals("1"));
     }
 
     @Test
-    void getVehicleInfoResponseDTO_500() {
+    void getVehicleInfo_500() throws RestCallException {
         String message = "Internal Server Error";
 
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "application/json")
                 .setBody(message)
                 .setResponseCode(500));
-        Exception exception = assertThrows(Exception.class, () -> vehicleInfoService.get("id"));
+        var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
         assert (exception.getMessage().equals(message));
+        assert (exception.getErrorCode() == 500);
+        assert (exception.getResourceId().equals("1"));
     }
 
     @Test
-    @Disabled("Until the VehicleService can handle empty String responses")
-    void getVehicleInfoResponseDTO_emptyResponseBody_500() {
-        String message = "Internal Server Error";
-
+    void getVehicleInfo_emptyResponseBody_500() throws RestCallException{
         mockWebServer.enqueue(new MockResponse()
                 .addHeader("Content-Type", "application/json")
                 .setResponseCode(500));
-        Exception exception = assertThrows(Exception.class, () -> vehicleInfoService.get("id"));
-        //TODO: The functionality for the WebClient needs to be revised.
-        // Expected to throw an error, instead got a null value for the VehicleInfoResponseDTO
-        assert (exception.getMessage().equals(message));
+        var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
+        assert (exception.getMessage().equals(ExceptionMessages.NO_BODY_MESSAGE));
+        assert (exception.getErrorCode() == 500);
+        assert (exception.getResourceId().equals("1"));
     }
 
 }

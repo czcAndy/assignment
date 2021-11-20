@@ -20,6 +20,7 @@ public class RestCallException extends RuntimeException{
 
     public RestCallException(String message, int errorCode) {
         super(message);
+        this.message = message;
         this.errorCode = errorCode;
     }
 
