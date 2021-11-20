@@ -1,5 +1,6 @@
 package org.vgcs.assignment.restservice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -27,7 +28,7 @@ abstract class GenericServiceTest<T, S extends GetService<T, String>> implements
         mockWebServer.shutdown();
     }
 
-    void enqueueMockResponse(Object body, int responseCode) throws Exception {
+    void enqueueMockResponse(Object body, int responseCode)  {
         var response = new MockResponse()
                 .addHeader("Content-Type", "application/json")
                 .setResponseCode(responseCode);
@@ -36,7 +37,11 @@ abstract class GenericServiceTest<T, S extends GetService<T, String>> implements
             if (body instanceof String)
                 response.setBody((String)body);
             else {
-                response.setBody(objectMapper.writeValueAsString(body));
+                try {
+                    response.setBody(objectMapper.writeValueAsString(body));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

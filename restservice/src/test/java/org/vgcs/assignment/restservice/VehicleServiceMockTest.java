@@ -22,7 +22,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
 
     @Override
     @Test
-    public void test_getResource_200() throws Exception {
+    public void test_getResource_200() throws RestCallException {
         VehicleResponseDTO body = new VehicleResponseDTO(
                 List.of(
                         new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
@@ -45,7 +45,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
 
     @Override
     @Test
-    public void test_getResource_400() throws Exception {
+    public void test_getResource_400() throws RestCallException {
         String body = "{Bad Request}";
         super.enqueueMockResponse(body, 400);
         var exception = assertThrows(RestCallException.class, () -> vehicleService.getAll());
@@ -60,7 +60,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
 
     @Override
     @Test
-    public void test_getResource_401() throws Exception {
+    public void test_getResource_401() throws RestCallException {
         String body = "{Unauthorized}";
 
         super.enqueueMockResponse(body, 401);
@@ -76,7 +76,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
 
     @Override
     @Test
-    public void test_getResource_404() throws Exception {
+    public void test_getResource_404() throws RestCallException {
         String body = "{Not found}";
 
         super.enqueueMockResponse(body, 404);
@@ -92,7 +92,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
 
     @Override
     @Test
-    public void test_getResource_500() throws Exception {
+    public void test_getResource_500() throws RestCallException {
         String body = "{Internal Server Error}";
 
         super.enqueueMockResponse(body, 500);
@@ -108,7 +108,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
 
     @Override
     @Test
-    public void test_getResource_nullBody() throws Exception {
+    public void test_getResource_nullBody() throws RestCallException {
 
         super.enqueueMockResponse(null, 500);
         var exception = assertThrows(RestCallException.class, () -> vehicleService.getAll());
@@ -122,7 +122,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
     }
 
     @Override
-    public void test_getResourceAsync_200() throws Exception {
+    public void test_getResourceAsync_200() {
         VehicleResponseDTO body = new VehicleResponseDTO(
                 List.of(
                         new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
@@ -145,7 +145,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
     }
 
     @Override
-    public void test_getResourceAsync_when_at_least_one_200() throws Exception {
+    public void test_getResourceAsync_when_at_least_one_200() {
         VehicleResponseDTO body = new VehicleResponseDTO(
                 List.of(
                         new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
@@ -168,7 +168,7 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
     }
 
     @Override
-    public void test_getResourceAsync_when_none_200() throws Exception {
+    public void test_getResourceAsync_when_none_200() {
         VehicleResponseDTO body = new VehicleResponseDTO(
                 List.of(
                         new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),

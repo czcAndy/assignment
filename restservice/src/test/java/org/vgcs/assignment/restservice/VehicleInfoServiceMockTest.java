@@ -27,25 +27,18 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
 
     @Override
     @Test
-    public void test_getResource_200() throws Exception {
+    public void test_getResource_200()  {
         VehicleInfoResponseDTO body = new VehicleInfoResponseDTO("+4678625847", "OK", "Thor's fleet", "Volvo Construction Equipment", "Japan", "000543", "VCE");
 
         super.enqueueMockResponse(body, 200);
         var response = vehicleInfoService.get("1");
 
-        assert (response.vehicleInfoResponseDTO().msidn().equals("+4678625847"));
-        assert (response.vehicleInfoResponseDTO().engineStatus().equals("OK"));
-        assert (response.vehicleInfoResponseDTO().fleet().equals("Thor's fleet"));
-        assert (response.vehicleInfoResponseDTO().brand().equals("Volvo Construction Equipment"));
-        assert (response.vehicleInfoResponseDTO().countryOfOperation().equals("Japan"));
-        assert (response.vehicleInfoResponseDTO().chassisNumber().equals("000543"));
-        assert (response.vehicleInfoResponseDTO().chassisSeries().equals("VCE"));
-
+        assert (response.vehicleInfoResponseDTO().equals(body));
     }
 
     @Override
     @Test
-    public void test_getResource_400() throws Exception {
+    public void test_getResource_400() throws RestCallException {
         String body = "{reason: Query param id missing from request.}";
         super.enqueueMockResponse(body, 400);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get(""));
@@ -57,7 +50,7 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
 
     @Override
     @Test
-    public void test_getResource_401() throws Exception {
+    public void test_getResource_401() throws RestCallException {
         String body = "{Unauthorized}";
         super.enqueueMockResponse(body, 401);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
@@ -69,7 +62,7 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
 
     @Override
     @Test
-    public void test_getResource_404() throws Exception {
+    public void test_getResource_404() throws RestCallException {
         String body = "{}";
         super.enqueueMockResponse(body, 404);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
@@ -81,7 +74,7 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
 
     @Override
     @Test
-    public void test_getResource_500() throws Exception {
+    public void test_getResource_500() throws RestCallException {
         super.enqueueMockResponse("Internal Server Error", 500);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
@@ -92,7 +85,7 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
 
     @Override
     @Test
-    public void test_getResource_nullBody() throws Exception {
+    public void test_getResource_nullBody() throws RestCallException {
         super.enqueueMockResponse(null, 500);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
@@ -103,7 +96,7 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
 
     @Override
     @Test
-    public void test_getResourceAsync_200() throws Exception {
+    public void test_getResourceAsync_200() {
         VehicleInfoResponseDTO body = new VehicleInfoResponseDTO("+4678625847", "OK", "Thor's fleet", "Volvo Construction Equipment", "Japan", "000543", "VCE");
         VehicleInfoResponseDTO body2 = new VehicleInfoResponseDTO("+4635489215", "DANGER", "Thor's fleet", "Volvo Trucks", "Mongolia", "954634", "VT");
 
@@ -119,7 +112,7 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
 
     @Override
     @Test
-    public void test_getResourceAsync_when_at_least_one_200() throws Exception {
+    public void test_getResourceAsync_when_at_least_one_200()  {
         VehicleInfoResponseDTO body = new VehicleInfoResponseDTO("+4678625847", "OK", "Thor's fleet", "Volvo Construction Equipment", "Japan", "000543", "VCE");
         VehicleInfoResponseDTO body2 = new VehicleInfoResponseDTO("+4635489215", "DANGER", "Thor's fleet", "Volvo Trucks", "Mongolia", "954634", "VT");
 
@@ -135,7 +128,7 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
 
     @Override
     @Test
-    public void test_getResourceAsync_when_none_200() throws Exception {
+    public void test_getResourceAsync_when_none_200()  {
         VehicleInfoResponseDTO body = new VehicleInfoResponseDTO("+4678625847", "OK", "Thor's fleet", "Volvo Construction Equipment", "Japan", "000543", "VCE");
         VehicleInfoResponseDTO body2 = new VehicleInfoResponseDTO("+4635489215", "DANGER", "Thor's fleet", "Volvo Trucks", "Mongolia", "954634", "VT");
 

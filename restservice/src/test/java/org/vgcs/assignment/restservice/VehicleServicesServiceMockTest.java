@@ -23,7 +23,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
 
     @Override
     @Test
-    public void test_getResource_200() throws Exception {
+    public void test_getResource_200() {
         VehicleServicesResponseDTO body = new VehicleServicesResponseDTO("ACTIVE",
                 List.of(
                         new ServiceDTO("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
@@ -31,21 +31,14 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
 
         super.enqueueMockResponse(body, 200);
 
-        VehicleServicesResponseWithIdDTO vehicleResponseMono = vehicleServicesService.get("1");
+        VehicleServicesResponseWithIdDTO response = vehicleServicesService.get("1");
 
-        assert (vehicleResponseMono.vehicleServicesResponseDTO().communicationStatus().equals("ACTIVE"));
-        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(0).serviceName().equals("GPS"));
-        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(0).status().equals("ACTIVE"));
-        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(0).lastUpdate().equals("2019-01-01T09:23:05+01:00"));
-
-        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(1).serviceName().equals("FuelMeasurement"));
-        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(1).status().equals("DEACTIVATED"));
-        assert (vehicleResponseMono.vehicleServicesResponseDTO().services().get(1).lastUpdate().equals("2019-01-01T09:23:05+01:00"));
+        assert (response.vehicleServicesResponseDTO().equals(body));
     }
 
     @Override
     @Test
-    public void test_getResource_400() throws Exception {
+    public void test_getResource_400() throws RestCallException {
         String body = "{Bad Request}";
         super.enqueueMockResponse(body, 400);
         var exception = assertThrows(RestCallException.class, () -> vehicleServicesService.get(""));
@@ -56,7 +49,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
 
     @Override
     @Test
-    public void test_getResource_401() throws Exception {
+    public void test_getResource_401() throws RestCallException {
         String body = "{Unauthorized}";
         super.enqueueMockResponse(body, 401);
         var exception = assertThrows(RestCallException.class, () -> vehicleServicesService.get("1"));
@@ -67,7 +60,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
 
     @Override
     @Test
-    public void test_getResource_404() throws Exception {
+    public void test_getResource_404() throws RestCallException {
         String body = "{Not Found}";
         super.enqueueMockResponse(body, 404);
         var exception = assertThrows(RestCallException.class, () -> vehicleServicesService.get("1"));
@@ -78,7 +71,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
 
     @Override
     @Test
-    public void test_getResource_500() throws Exception {
+    public void test_getResource_500() throws RestCallException {
         String body = "{Internal Server Error}";
         super.enqueueMockResponse(body, 500);
         var exception = assertThrows(RestCallException.class, () -> vehicleServicesService.get("1"));
@@ -89,7 +82,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
 
     @Override
     @Test
-    public void test_getResource_nullBody() throws Exception {
+    public void test_getResource_nullBody() throws RestCallException {
         super.enqueueMockResponse(null, 500);
         var exception = assertThrows(RestCallException.class, () -> vehicleServicesService.get("1"));
         assert (exception.getMessage().equals(ExceptionMessages.NO_BODY_MESSAGE));
@@ -99,7 +92,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
 
     @Override
     @Test
-    public void test_getResourceAsync_200() throws Exception {
+    public void test_getResourceAsync_200() {
         VehicleServicesResponseDTO body = new VehicleServicesResponseDTO("ACTIVE",
                 List.of(
                         new ServiceDTO("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
@@ -122,7 +115,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
 
     @Override
     @Test
-    public void test_getResourceAsync_when_at_least_one_200() throws Exception {
+    public void test_getResourceAsync_when_at_least_one_200() {
         VehicleServicesResponseDTO body = new VehicleServicesResponseDTO("ACTIVE",
                 List.of(
                         new ServiceDTO("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
@@ -143,7 +136,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
     }
 
     @Override
-    public void test_getResourceAsync_when_none_200() throws Exception {
+    public void test_getResourceAsync_when_none_200() {
         VehicleServicesResponseDTO body = new VehicleServicesResponseDTO("ACTIVE",
                 List.of(
                         new ServiceDTO("GPS", "ACTIVE", "2019-01-01T09:23:05+01:00"),
