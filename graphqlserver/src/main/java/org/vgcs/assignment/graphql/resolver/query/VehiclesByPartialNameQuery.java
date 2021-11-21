@@ -48,6 +48,8 @@ public class VehiclesByPartialNameQuery implements GraphQLQueryResolver {
                 if (wrapper.hasData()){
                     var vehicleList = wrapper.getData();
                     var vehicleCompleteList = getVehicleCompleteListByName(name, vehicleList);
+
+                    vehicleRepo.saveAll(vehicleList);
                     result.data(vehicleCompleteList);
                 }
 

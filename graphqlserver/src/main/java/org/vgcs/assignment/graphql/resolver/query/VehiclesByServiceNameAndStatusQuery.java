@@ -5,7 +5,6 @@ import graphql.kickstart.execution.error.GenericGraphQLError;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
-import org.vgcs.assignment.graphql.datafetcher.DtoWrapper;
 import org.vgcs.assignment.graphql.datafetcher.WrapperGetAllResources;
 import org.vgcs.assignment.graphql.datafetcher.WrapperGetResource;
 import org.vgcs.assignment.graphql.datafetcher.WrapperGetResourcesByReflection;
@@ -61,8 +60,11 @@ public class VehiclesByServiceNameAndStatusQuery implements GraphQLQueryResolver
                     var vehicleIds = restWrapperVehicles.getData().stream().map(Vehicle::getId).toList();
                     var vehicleServicesDTOWrapper = vehicleServicesServiceWrapper.getAsync(vehicleServicesService, vehicleIds);
                     if (vehicleServicesDTOWrapper.hasData()) {
-                        var vehicles = getVehiclesFromServices(serviceName, serviceStatus, vehicleServicesDTOWrapper);
+                        var vehicleServices = vehicleServicesDTOWrapper.getData();
+                        var vehicles = getVehiclesFromServices(serviceName, serviceStatus, vehicleServices);
                         result.data(vehicles);
+
+                        vehicleServicesRepo.saveAll(vehicleServices);
                     }
 
                     if (vehicleServicesDTOWrapper.hasError()) {
@@ -82,8 +84,8 @@ public class VehiclesByServiceNameAndStatusQuery implements GraphQLQueryResolver
         return vc;
     }
 
-    private List<VehicleComplete> getVehiclesFromServices(String serviceName, String serviceStatus, DtoWrapper<List<VehicleServices>> vehicleServicesDTOWrapper) {
-        return vehicleServicesDTOWrapper.getData().stream()
+    private List<VehicleComplete> getVehiclesFromServices(String serviceName, String serviceStatus, List<VehicleServices> vehicleServices) {
+        return vehicleServices.stream()
                 .filter(service -> service.getServices().stream()
                         .anyMatch(s -> s.getServiceName() != null && s.getServiceName().equals(serviceName) && s.getStatus().equals(serviceStatus))
                 )
