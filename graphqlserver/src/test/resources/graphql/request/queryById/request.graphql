@@ -1,0 +1,16 @@
+{
+  query(id: "bd45a676-0d0e-48b4-9693-e8196eb7fcbf"){
+    vehicle {
+      id
+    },
+    vehicleInfo {
+      msidn
+    }, vehicleServices {
+      communicationStatus,
+      services {
+        status,
+        serviceName
+      }
+    }
+  }
+}

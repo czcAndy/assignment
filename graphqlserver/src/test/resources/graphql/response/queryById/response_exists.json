@@ -1,0 +1,26 @@
+{
+  "data": {
+    "query": {
+      "vehicle": {
+      "id": "bd45a676-0d0e-48b4-9693-e8196eb7fcbf"
+      },
+      "vehicleInfo": {
+        "msidn": "+4678625847"
+      },
+      "vehicleServices": {
+        "communicationStatus": "ACTIVE",
+        "services": [
+          {
+            "status": "ACTIVE",
+            "serviceName": "GPS"
+          },
+          {
+            "status": "DEACTIVATED",
+            "serviceName": "FuelMeasurement"
+          }
+        ]
+      }
+    }
+  }
+}
+

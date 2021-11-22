@@ -1,0 +1,21 @@
+{
+  "errors": [
+    {
+      "message": "401:{Cannot fetch resource}:bd45a676-0d0e-48b4-9693-e8196eb7fcbf",
+      "locations": []
+    },
+    {
+      "message": "401:{Cannot fetch resource}:bd45a676-0d0e-48b4-9693-e8196eb7fcbf",
+      "locations": []
+    }
+  ],
+  "data": {
+    "query": {
+      "vehicleInfo": null,
+      "vehicleServices": null,
+      "vehicle": {
+        "id": "bd45a676-0d0e-48b4-9693-e8196eb7fcbf"
+      }
+    }
+  }
+}
