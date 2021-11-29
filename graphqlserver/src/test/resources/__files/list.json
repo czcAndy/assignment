@@ -1,0 +1,19 @@
+{
+  "vehicles": [
+    {
+      "name": "big truck",
+      "id": "bd45a676-0d0e-48b4-9693-e8196eb7fcbf"
+    },
+    {
+      "name": "small truck",
+      "id": "2337d25f-8917-4e26-920f-ddbe9ba063d6"
+    },
+    {
+      "name": "niklas' truck",
+      "id": "f7c8402d-98ca-4728-9c3e-0805c3ecffbb"
+    },
+    {
+      "id": "6bf12248-3d72-46fa-9d03-fc7176523012"
+    }
+  ]
+}

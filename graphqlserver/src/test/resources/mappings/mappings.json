@@ -1,0 +1,161 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "url": "/vehicle/list/",
+        "method": "GET"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "list.json",
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/info"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{\"reason\": \"Query param id missing from request.\"}",
+        "status": 400
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/info?id=bd45a676-0d0e-48b4-9693-e8196eb7fcbf"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "vehicleInfo_bd45a676-0d0e-48b4-9693-e8196eb7fcbf.json",
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/info?id=2337d25f-8917-4e26-920f-ddbe9ba063d6"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "vehicleInfo_2337d25f-8917-4e26-920f-ddbe9ba063d6",
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/info?id=f7c8402d-98ca-4728-9c3e-0805c3ecffbb"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{Forbidden}",
+        "status": 401
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/info?id=6bf12248-3d72-46fa-9d03-fc7176523012"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "vehicleInfo_6bf12248-3d72-46fa-9d03-fc7176523012",
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/info?id=dummy"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{Not found}",
+        "status": 404
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/services"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{\"reason\": \"Query param id missing from request.\"}",
+        "status": 400
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/services?id=bd45a676-0d0e-48b4-9693-e8196eb7fcbf"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "services_bd45a676-0d0e-48b4-9693-e8196eb7fcbf.json",
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/services?id=2337d25f-8917-4e26-920f-ddbe9ba063d6"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "services_2337d25f-8917-4e26-920f-ddbe9ba063d6.json",
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/services?id=f7c8402d-98ca-4728-9c3e-0805c3ecffbb"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{Forbidden}",
+        "status": 401
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/services?id=6bf12248-3d72-46fa-9d03-fc7176523012"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "services_6bf12248-3d72-46fa-9d03-fc7176523012.json",
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "url": "/vehicle/info?id=dummy"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{Not found}",
+        "status": 404
+      }
+    }
+  ]
+}

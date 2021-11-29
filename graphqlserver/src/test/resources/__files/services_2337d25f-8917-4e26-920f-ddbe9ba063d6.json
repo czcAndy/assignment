@@ -1,0 +1,36 @@
+{
+  "communicationStatus": "ACTIVE",
+  "services": [
+    {
+      "serviceName": "GPS",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-07-16T19:20:30+01:00"
+    },
+    {
+      "serviceName": "FuelMeasurment",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-07-21T10:02:31+01:00"
+    },
+    {
+      "serviceName": "rsdwl",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-09-15T19:22:02+01:00"
+    },
+    {
+      "serviceName": "REMOTE_CONTROLL",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-09-15T19:22:02+01:00"
+    },
+    {
+      "serviceName": "management-console",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-09-15T19:22:02+01:00"
+    },
+    {
+      "serviceName": "fleetAdminAdvanced",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-01-16T10:21:22+01:00"
+    }
+  ]
+}
+

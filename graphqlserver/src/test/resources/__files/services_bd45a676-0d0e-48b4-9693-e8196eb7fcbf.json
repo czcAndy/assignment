@@ -1,0 +1,37 @@
+{
+  "communicationStatus": "ACTIVE",
+  "services": [
+    {
+      "serviceName": "GPS",
+      "status": "ACTIVE",
+      "lastUpdate" : "2019-01-01T09:23:05+01:00"
+    },
+    {
+      "serviceName": "FuelMeasurment",
+      "status": "DEACTIVATED",
+      "lastUpdate" : "2019-01-01T09:23:55+01:00"
+    },
+    {
+      "serviceName": "rsdwl",
+      "status": "ERROR",
+      "reason": "Service Activation Failed.",
+      "lastUpdate" : "2019-01-01T09:22:05+01:00"
+    },
+    {
+      "serviceName": "REMOTE_CONTROLL",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-09-15T19:22:02+01:00"
+    },
+    {
+      "serviceName": "management-console",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-09-15T19:22:02+01:00"
+    },
+    {
+      "serviceName": "fleetAdminAdvanced",
+      "status": "ACTIVE",
+      "lastUpdate" : "2020-01-16T10:21:22+01:00"
+    }
+  ]
+}
+

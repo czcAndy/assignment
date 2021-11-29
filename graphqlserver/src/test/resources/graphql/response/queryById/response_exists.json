@@ -11,12 +11,28 @@
         "communicationStatus": "ACTIVE",
         "services": [
           {
-            "status": "ACTIVE",
-            "serviceName": "GPS"
+            "serviceName": "GPS",
+            "status": "ACTIVE"
           },
           {
-            "status": "DEACTIVATED",
-            "serviceName": "FuelMeasurement"
+            "serviceName": "FuelMeasurment",
+            "status": "DEACTIVATED"
+          },
+          {
+            "serviceName": "rsdwl",
+            "status": "ERROR"
+          },
+          {
+            "serviceName": "REMOTE_CONTROLL",
+            "status": "ACTIVE"
+          },
+          {
+            "serviceName": "management-console",
+            "status": "ACTIVE"
+          },
+          {
+            "serviceName": "fleetAdminAdvanced",
+            "status": "ACTIVE"
           }
         ]
       }
