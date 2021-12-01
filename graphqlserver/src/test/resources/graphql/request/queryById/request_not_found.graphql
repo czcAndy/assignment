@@ -1,0 +1,16 @@
+{
+    query(id: "dummy"){
+        vehicle {
+            id
+        },
+        vehicleInfo {
+            msidn
+        }, vehicleServices {
+            communicationStatus,
+            services {
+                status,
+                serviceName
+            }
+        }
+    }
+}

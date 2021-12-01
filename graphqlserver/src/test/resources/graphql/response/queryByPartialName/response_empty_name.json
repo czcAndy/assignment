@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "Value for vehicle name is blank. This is not allowed",
+      "locations": []
+    }
+  ],
+  "data": {
+    "queryByPartialName": null
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "errors": [
+    {
+      "message": "404:{Not found}:dummy",
+      "locations": []
+    },
+    {
+      "message": "404:{Not found}:dummy",
+      "locations": []
+    }
+  ],
+  "data": {
+    "query": {
+      "vehicleInfo": null,
+      "vehicleServices": null,
+      "vehicle": null
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+    queryByPartialName(name: "dummy"){
+        vehicle {
+            id,
+            name
+        },
+        vehicleInfo {
+            msidn
+        }, vehicleServices {
+            communicationStatus,
+            services {
+                status,
+                serviceName
+            }
+        }
+    }
+}

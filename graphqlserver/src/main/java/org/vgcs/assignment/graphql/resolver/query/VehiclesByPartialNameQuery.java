@@ -35,6 +35,12 @@ public class VehiclesByPartialNameQuery implements GraphQLQueryResolver {
     }
 
     public CompletableFuture<DataFetcherResult<List<VehicleComplete>>> queryByPartialName(String name) {
+        if (name.isEmpty())
+            return CompletableFuture.completedFuture(
+                    DataFetcherResult.<List<VehicleComplete>>newResult()
+                            .error(new GenericGraphQLError("Value for vehicle name is blank. This is not allowed"))
+                            .build());
+
         return CompletableFuture.supplyAsync(() -> {
             var result = DataFetcherResult.<List<VehicleComplete>>newResult();
             var resultMongo =  vehicleRepoWrapper.getAll(vehicleRepo, FIND_ALL_BY_NAME_CONTAINS, name);

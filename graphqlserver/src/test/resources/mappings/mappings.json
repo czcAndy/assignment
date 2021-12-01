@@ -45,7 +45,7 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "bodyFileName": "vehicleInfo_2337d25f-8917-4e26-920f-ddbe9ba063d6",
+        "bodyFileName": "vehicleInfo_2337d25f-8917-4e26-920f-ddbe9ba063d6.json",
         "status": 200
       }
     },
@@ -69,7 +69,7 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "bodyFileName": "vehicleInfo_6bf12248-3d72-46fa-9d03-fc7176523012",
+        "bodyFileName": "vehicleInfo_6bf12248-3d72-46fa-9d03-fc7176523012.json",
         "status": 200
       }
     },
@@ -147,7 +147,7 @@
     },
     {
       "request": {
-        "url": "/vehicle/info?id=dummy"
+        "url": "/vehicle/services?id=dummy"
       },
       "response": {
         "headers": {

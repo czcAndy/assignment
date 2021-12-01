@@ -1,0 +1,82 @@
+{
+  "data": {
+    "queryByServiceStatus": [
+      {
+        "vehicle": {
+          "id": "2337d25f-8917-4e26-920f-ddbe9ba063d6",
+          "name": "small truck"
+        },
+        "vehicleInfo": {
+          "msidn": "+4635489215"
+        },
+        "vehicleServices": {
+          "communicationStatus": "ACTIVE",
+          "services": [
+            {
+              "status": "ACTIVE",
+              "serviceName": "GPS"
+            },
+            {
+              "status": "ACTIVE",
+              "serviceName": "FuelMeasurment"
+            },
+            {
+              "status": "ACTIVE",
+              "serviceName": "rsdwl"
+            },
+            {
+              "status": "ACTIVE",
+              "serviceName": "REMOTE_CONTROLL"
+            },
+            {
+              "status": "ACTIVE",
+              "serviceName": "management-console"
+            },
+            {
+              "status": "ACTIVE",
+              "serviceName": "fleetAdminAdvanced"
+            }
+          ]
+        }
+      },
+      {
+        "vehicle": {
+          "id": "bd45a676-0d0e-48b4-9693-e8196eb7fcbf",
+          "name": "big truck"
+        },
+        "vehicleInfo": {
+          "msidn": "+4678625847"
+        },
+        "vehicleServices": {
+          "communicationStatus": "ACTIVE",
+          "services": [
+            {
+              "status": "ACTIVE",
+              "serviceName": "GPS"
+            },
+            {
+              "status": "DEACTIVATED",
+              "serviceName": "FuelMeasurment"
+            },
+            {
+              "status": "ERROR",
+              "serviceName": "rsdwl"
+            },
+            {
+              "status": "ACTIVE",
+              "serviceName": "REMOTE_CONTROLL"
+            },
+            {
+              "status": "ACTIVE",
+              "serviceName": "management-console"
+            },
+            {
+              "status": "ACTIVE",
+              "serviceName": "fleetAdminAdvanced"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

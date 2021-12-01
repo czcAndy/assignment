@@ -1,0 +1,17 @@
+{
+    queryByServiceStatus(serviceName: "GPS", serviceStatus: "ACTIVE"){
+        vehicle {
+            id,
+            name
+        },
+        vehicleInfo {
+            msidn
+        }, vehicleServices {
+            communicationStatus,
+            services {
+                status,
+                serviceName
+            }
+        }
+    }
+}

@@ -45,6 +45,12 @@ public class VehiclesByServiceNameAndStatusQuery implements GraphQLQueryResolver
     }
 
     public CompletableFuture<DataFetcherResult<List<VehicleComplete>>> queryByServiceStatus(String serviceName, String serviceStatus) {
+        if (serviceName.isEmpty() || serviceStatus.isEmpty())
+            return CompletableFuture.completedFuture(
+                    DataFetcherResult.<List<VehicleComplete>>newResult()
+                            .error(new GenericGraphQLError("Value for service name or service status is blank. This is not allowed"))
+                            .build());
+
         return CompletableFuture.supplyAsync(() -> {
             var result = DataFetcherResult.<List<VehicleComplete>>newResult();
             var resultMongo =  vehicleServicesRepoWrapper.getAll(vehicleServicesRepo, FIND_SERVICES_BY_NAME_AND_STATUS, serviceName, serviceStatus);

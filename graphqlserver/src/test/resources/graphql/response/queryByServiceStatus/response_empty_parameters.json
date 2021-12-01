@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "Value for service name or service status is blank. This is not allowed",
+      "locations": []
+    }
+  ],
+  "data": {
+    "queryByServiceStatus": null
+  }
+}
