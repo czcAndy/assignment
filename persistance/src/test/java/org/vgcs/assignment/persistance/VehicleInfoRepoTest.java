@@ -1,12 +1,16 @@
 package org.vgcs.assignment.persistance;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.vgcs.assignment.persistance.model.VehicleInfo;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataMongoTest
 @EnableMongoRepositories
@@ -21,6 +25,7 @@ class VehicleInfoRepoTest implements PersistanceTestSpecifications{
         vehicleInfoRepo.deleteAll();
     }
     @Override
+    @Test
     public void findById_OK_test() {
         VehicleInfo vehicleInfo = new VehicleInfo();
         vehicleInfo.setId("1");
@@ -36,11 +41,12 @@ class VehicleInfoRepoTest implements PersistanceTestSpecifications{
 
         var result = vehicleInfoRepo.findById("1");
 
-        assert (result.isPresent());
-        assert (result.get().equals(vehicleInfo));
+        assertTrue(result.isPresent());
+        assertEquals(result.get(), vehicleInfo);
     }
 
     @Override
+    @Test
     public void findById_not_OK_test() {
         VehicleInfo vehicleInfo = new VehicleInfo();
         vehicleInfo.setId("1");
@@ -56,6 +62,6 @@ class VehicleInfoRepoTest implements PersistanceTestSpecifications{
 
         var result = vehicleInfoRepo.findById("2");
 
-        assert (result.isEmpty());
+        assertTrue(result.isEmpty());
     }
 }

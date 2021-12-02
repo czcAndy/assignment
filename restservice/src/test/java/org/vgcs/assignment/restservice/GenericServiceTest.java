@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.IOException;
 
 
-abstract class GenericServiceTest<T, S extends GetService<T, String>> implements ServiceTestSpecifications {
+abstract class GenericServiceTest implements ServiceTestSpecifications {
     private static MockWebServer mockWebServer;
     private static ObjectMapper objectMapper;
 

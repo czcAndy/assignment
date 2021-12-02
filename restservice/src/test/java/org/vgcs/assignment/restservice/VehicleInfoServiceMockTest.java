@@ -5,17 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.vgcs.assignment.restservice.configuration.RestServiceConfig;
 import org.vgcs.assignment.restservice.dto.VehicleInfoResponseDTO;
-import org.vgcs.assignment.restservice.dto.VehicleInfoResponseWithIdDTO;
 import org.vgcs.assignment.restservice.exception.ExceptionMessages;
 import org.vgcs.assignment.restservice.exception.RestCallException;
 import org.vgcs.assignment.restservice.impl.VehicleInfoServiceImpl;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {VehicleInfoServiceImpl.class, RestServiceConfig.class})
-class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithIdDTO, VehicleInfoService>{
+class VehicleInfoServiceMockTest extends GenericServiceTest{
 
     @Autowired
     private VehicleInfoService vehicleInfoService;
@@ -28,7 +27,7 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
         super.enqueueMockResponse(body, 200);
         var response = vehicleInfoService.get("1");
 
-        assert (response.vehicleInfoResponseDTO().equals(body));
+        assertEquals(response.vehicleInfoResponseDTO(), body);
     }
 
     @Override
@@ -38,9 +37,9 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
         super.enqueueMockResponse(body, 400);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get(""));
 
-        assert (exception.getMessage().equals(body));
-        assert (exception.getErrorCode() == 400);
-        assert (exception.getResourceId().equals(""));
+        assertEquals(exception.getMessage(), body);
+        assertEquals(400, exception.getErrorCode());
+        assertEquals("", exception.getResourceId());
     }
 
     @Override
@@ -50,9 +49,9 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
         super.enqueueMockResponse(body, 401);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
-        assert (exception.getMessage().equals(body));
-        assert (exception.getErrorCode() == 401);
-        assert (exception.getResourceId().equals("1"));
+        assertEquals(exception.getMessage(), body);
+        assertEquals(401, exception.getErrorCode());
+        assertEquals("1", exception.getResourceId());
     }
 
     @Override
@@ -62,9 +61,9 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
         super.enqueueMockResponse(body, 404);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
-        assert (exception.getMessage().equals(body));
-        assert (exception.getErrorCode() == 404);
-        assert (exception.getResourceId().equals("1"));
+        assertEquals(exception.getMessage(), body);
+        assertEquals(404, exception.getErrorCode());
+        assertEquals("1", exception.getResourceId());
     }
 
     @Override
@@ -73,9 +72,9 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
         super.enqueueMockResponse("Internal Server Error", 500);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
-        assert (exception.getMessage().equals("Internal Server Error"));
-        assert (exception.getErrorCode() == 500);
-        assert (exception.getResourceId().equals("1"));
+        assertEquals("Internal Server Error", exception.getMessage());
+        assertEquals(500, exception.getErrorCode());
+        assertEquals("1", exception.getResourceId());
     }
 
     @Override
@@ -84,9 +83,9 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
         super.enqueueMockResponse(null, 500);
         var exception = assertThrows(RestCallException.class, () -> vehicleInfoService.get("1"));
 
-        assert (exception.getMessage().equals(ExceptionMessages.NO_BODY_MESSAGE));
-        assert (exception.getErrorCode() == 500);
-        assert (exception.getResourceId().equals("1"));
+        assertEquals(ExceptionMessages.NO_BODY_MESSAGE, exception.getMessage());
+        assertEquals(500, exception.getErrorCode());
+        assertEquals("1", exception.getResourceId());
     }
 
     @Override
@@ -101,8 +100,8 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
         var response = vehicleInfoService.getAsync(List.of("1","2"));
 
         assert(response.size() == 2);
-        assert (response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body)));
-        assert (response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body2)));
+        assertTrue(response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body)));
+        assertTrue(response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body2)));
     }
 
     @Override
@@ -117,8 +116,8 @@ class VehicleInfoServiceMockTest extends GenericServiceTest<VehicleInfoResponseW
         var response = vehicleInfoService.getAsync(List.of("1","2"));
 
         assert(response.size() == 1);
-        assert (response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body)));
-        assert (response.stream().noneMatch(r -> r.vehicleInfoResponseDTO().equals(body2)));
+        assertTrue(response.stream().anyMatch(r -> r.vehicleInfoResponseDTO().equals(body)));
+        assertTrue(response.stream().noneMatch(r -> r.vehicleInfoResponseDTO().equals(body2)));
     }
 
     @Override

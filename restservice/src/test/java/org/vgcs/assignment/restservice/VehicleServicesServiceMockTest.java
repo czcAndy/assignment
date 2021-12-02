@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = {VehicleServicesServiceImpl.class, RestServiceConfig.class})
-class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesResponseWithIdDTO, VehicleServicesService> {
+class VehicleServicesServiceMockTest extends GenericServiceTest {
 
     @Autowired
     private VehicleServicesService vehicleServicesService;
@@ -136,6 +136,7 @@ class VehicleServicesServiceMockTest extends GenericServiceTest<VehicleServicesR
     }
 
     @Override
+    @Test
     public void test_getResourceAsync_when_none_200() {
         VehicleServicesResponseDTO body = new VehicleServicesResponseDTO("ACTIVE",
                 List.of(

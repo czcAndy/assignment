@@ -17,6 +17,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @DataMongoTest
 @EnableMongoRepositories
 @AutoConfigureDataMongo
@@ -52,8 +55,8 @@ class VehicleServicesRepoTest implements PersistanceTestSpecifications {
         vehicleServicesRepo.save(vs);
 
         Optional<VehicleServices> result = vehicleServicesRepo.findById("1");
-        assert (result.isPresent());
-        assert (result.get().equals(vs));
+        assertTrue(result.isPresent());
+        assertEquals(result.get(), vs);
     }
 
     @Override
@@ -71,7 +74,7 @@ class VehicleServicesRepoTest implements PersistanceTestSpecifications {
         vehicleServicesRepo.save(vs);
 
         Optional<VehicleServices> result = vehicleServicesRepo.findById("2");
-        assert (result.isEmpty());
+        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -112,9 +115,9 @@ class VehicleServicesRepoTest implements PersistanceTestSpecifications {
         vehicleServicesRepo.saveAll(List.of(vs1, vs2, vs3, vs4));
 
         List<VehicleServices> result = vehicleServicesRepo.findServicesByNameAndStatus("GPS", "ACTIVE");
-        assert (result.size() == 2);
-        assert (result.get(0).equals(vs1));
-        assert (result.get(1).equals(vs2));
+        assertEquals(2, result.size());
+        assertEquals(result.get(0), vs1);
+        assertEquals(result.get(1), vs2);
     }
 
     @Test
@@ -131,6 +134,6 @@ class VehicleServicesRepoTest implements PersistanceTestSpecifications {
         vehicleServicesRepo.save(vs);
 
         List<VehicleServices> result = vehicleServicesRepo.findServicesByNameAndStatus("GPS", "ERROR");
-        assert (result.isEmpty());
+        assertTrue(result.isEmpty());
     }
 }

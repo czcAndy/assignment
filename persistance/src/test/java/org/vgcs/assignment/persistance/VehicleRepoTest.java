@@ -11,9 +11,11 @@ import org.vgcs.assignment.persistance.model.Vehicle;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @DataMongoTest
 @EnableMongoRepositories
-@AutoConfigureDataMongo
 @ContextConfiguration(classes = VehicleRepo.class)
 class VehicleRepoTest implements PersistanceTestSpecifications{
 
@@ -35,8 +37,8 @@ class VehicleRepoTest implements PersistanceTestSpecifications{
         vehicleRepo.save(v);
 
         var response = vehicleRepo.findById("1");
-        assert (response.isPresent());
-        assert (response.get().equals(v));
+        assertTrue(response.isPresent());
+        assertEquals(response.get(), v);
     }
 
     @Override
@@ -49,7 +51,7 @@ class VehicleRepoTest implements PersistanceTestSpecifications{
         vehicleRepo.save(v);
 
         var response = vehicleRepo.findById("2");
-        assert (response.isEmpty());
+        assertTrue(response.isEmpty());
     }
 
     @Test
@@ -69,9 +71,9 @@ class VehicleRepoTest implements PersistanceTestSpecifications{
         vehicleRepo.saveAll(List.of(v1, v2, v3));
 
         var response = vehicleRepo.findAllByNameContains("ruc");
-        assert (response.size() == 2);
-        assert (response.get(0).equals(v1));
-        assert (response.get(1).equals(v2));
+        assertEquals(2, response.size());
+        assertEquals(response.get(0), v1);
+        assertEquals(response.get(1), v2);
     }
 
     @Test
@@ -91,7 +93,7 @@ class VehicleRepoTest implements PersistanceTestSpecifications{
         vehicleRepo.saveAll(List.of(v1, v2, v3));
 
         var response = vehicleRepo.findAllByNameContains("Vehicle");
-        assert (response.isEmpty());
+        assertTrue(response.isEmpty());
     }
 
     @Test
@@ -111,9 +113,9 @@ class VehicleRepoTest implements PersistanceTestSpecifications{
         vehicleRepo.saveAll(List.of(v1, v2, v3));
 
         var response = vehicleRepo.findAllByNameContains("");
-        assert (response.size() == 3);
-        assert (response.get(0).equals(v1));
-        assert (response.get(1).equals(v2));
-        assert (response.get(2).equals(v3));
+        assertEquals(3, response.size());
+        assertEquals(response.get(0), v1);
+        assertEquals(response.get(1), v2);
+        assertEquals(response.get(2), v3);
     }
 }
