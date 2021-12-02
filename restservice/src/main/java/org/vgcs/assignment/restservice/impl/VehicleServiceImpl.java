@@ -46,27 +46,4 @@ public class VehicleServiceImpl implements VehicleService {
         Optional<VehicleDTO> vehicle = getAll().stream().filter(v -> v.id().equals(id)).findFirst();
         return vehicle.orElse(null);
     }
-
-    @Override
-    public List<VehicleDTO> getAsync(List<String> ids) {
-        CompletableFuture<List<VehicleDTO>> future = new CompletableFuture<>();
-        List<VehicleDTO> res = new ArrayList<>();
-
-        Flux.fromIterable(ids)
-                .flatMap(id ->
-                        webClient.get()
-                                .uri("/vehicle/list/")
-                                .retrieve()
-                                .bodyToMono(VehicleDTO.class)
-                                .onErrorResume(e -> Mono.empty()))
-                .doOnComplete(() -> future.complete(res))
-                .subscribe(res::add);
-
-
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException ex) {
-            return List.of();
-        }
-    }
 }

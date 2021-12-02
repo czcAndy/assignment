@@ -6,7 +6,7 @@ import graphql.kickstart.tools.GraphQLQueryResolver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.vgcs.assignment.graphql.datafetcher.WrapperGetAllResources;
-import org.vgcs.assignment.graphql.datafetcher.WrapperGetResource;
+import org.vgcs.assignment.graphql.datafetcher.WrapperGetResourcesAsync;
 import org.vgcs.assignment.graphql.datafetcher.WrapperGetResourcesByReflection;
 import org.vgcs.assignment.persistance.VehicleServicesRepo;
 import org.vgcs.assignment.persistance.model.Vehicle;
@@ -27,14 +27,14 @@ public class VehiclesByServiceNameAndStatusQuery implements GraphQLQueryResolver
     private final VehicleService vehicleService;
 
     private final WrapperGetAllResources<Vehicle, VehicleService> vehicleServiceWrapper;
-    private final WrapperGetResource<VehicleServices, VehicleServicesService, String> vehicleServicesServiceWrapper;
+    private final WrapperGetResourcesAsync<VehicleServices, VehicleServicesService, String> vehicleServicesServiceWrapper;
     private final WrapperGetResourcesByReflection<VehicleServices, VehicleServicesRepo> vehicleServicesRepoWrapper;
 
     public VehiclesByServiceNameAndStatusQuery(VehicleServicesService vehicleServicesService,
                                                VehicleServicesRepo vehicleServicesRepo,
                                                VehicleService vehicleService,
                                                WrapperGetAllResources<Vehicle, VehicleService> vehicleServiceWrapper,
-                                               WrapperGetResource<VehicleServices, VehicleServicesService, String> vehicleServicesServiceWrapper,
+                                               WrapperGetResourcesAsync<VehicleServices, VehicleServicesService, String> vehicleServicesServiceWrapper,
                                                WrapperGetResourcesByReflection<VehicleServices, VehicleServicesRepo> vehicleServicesRepoWrapper) {
         this.vehicleServicesService = vehicleServicesService;
         this.vehicleServicesRepo = vehicleServicesRepo;

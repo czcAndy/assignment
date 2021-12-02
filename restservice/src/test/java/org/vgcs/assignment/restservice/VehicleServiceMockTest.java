@@ -1,11 +1,11 @@
 package org.vgcs.assignment.restservice;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.vgcs.assignment.restservice.configuration.RestServiceConfig;
 import org.vgcs.assignment.restservice.dto.VehicleDTO;
-import org.vgcs.assignment.restservice.dto.VehicleInfoResponseWithIdDTO;
 import org.vgcs.assignment.restservice.dto.VehicleResponseDTO;
 import org.vgcs.assignment.restservice.exception.ExceptionMessages;
 import org.vgcs.assignment.restservice.exception.RestCallException;
@@ -13,10 +13,10 @@ import org.vgcs.assignment.restservice.impl.VehicleServiceImpl;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {VehicleServiceImpl.class, RestServiceConfig.class})
-class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithIdDTO, VehicleInfoService>{
+class VehicleServiceMockTest extends GenericServiceTest{
     @Autowired
     private VehicleService vehicleService;
 
@@ -31,16 +31,16 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
         super.enqueueMockResponse(body, 200);
         List<VehicleDTO> response = vehicleService.getAll();
 
-        assert (response.get(0).id().equals("bd45a676-0d0e-48b4-9693-e8196eb7fcbf"));
-        assert (response.get(0).name().equals("big truck"));
+        assertEquals("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", response.get(0).id());
+        assertEquals("big truck", response.get(0).name());
 
-        assert (response.get(1).id().equals("2337d25f-8917-4e26-920f-ddbe9ba063d6"));
-        assert (response.get(1).name().equals("small truck"));
+        assertEquals("2337d25f-8917-4e26-920f-ddbe9ba063d6", response.get(1).id());
+        assertEquals("small truck", response.get(1).name());
 
         super.enqueueMockResponse(body, 200);
         VehicleDTO response2 = vehicleService.get("bd45a676-0d0e-48b4-9693-e8196eb7fcbf");
-        assert (response2.id().equals("bd45a676-0d0e-48b4-9693-e8196eb7fcbf"));
-        assert (response2.name().equals("big truck"));
+        assertEquals("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", response2.id());
+        assertEquals("big truck", response2.name());
     }
 
     @Override
@@ -52,10 +52,10 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
         super.enqueueMockResponse(body, 400);
         var exception2 = assertThrows(RestCallException.class, () -> vehicleService.get("1"));
 
-        assert (exception.getMessage().equals(body));
-        assert (exception.getErrorCode() == 400);
-        assert (exception2.getMessage().equals(body));
-        assert (exception2.getErrorCode() == 400);
+        assertEquals(exception.getMessage(), body);
+        assertEquals(400, exception.getErrorCode());
+        assertEquals(exception2.getMessage(), body);
+        assertEquals(400, exception2.getErrorCode());
     }
 
     @Override
@@ -68,10 +68,10 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
         super.enqueueMockResponse(body, 401);
         var exception2 = assertThrows(RestCallException.class, () -> vehicleService.get("1"));
 
-        assert (exception.getMessage().equals(body));
-        assert (exception.getErrorCode() == 401);
-        assert (exception2.getMessage().equals(body));
-        assert (exception2.getErrorCode() == 401);
+        assertEquals(exception.getMessage(), body);
+        assertEquals(401, exception.getErrorCode());
+        assertEquals(exception2.getMessage(), body);
+        assertEquals(401, exception2.getErrorCode());
     }
 
     @Override
@@ -84,10 +84,10 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
         super.enqueueMockResponse(body, 404);
         var exception2 = assertThrows(RestCallException.class, () -> vehicleService.get("1"));
 
-        assert (exception.getMessage().equals(body));
-        assert (exception.getErrorCode() == 404);
-        assert (exception2.getMessage().equals(body));
-        assert (exception2.getErrorCode() == 404);
+        assertEquals(exception.getMessage(), body);
+        assertEquals(404, exception.getErrorCode());
+        assertEquals(exception2.getMessage(), body);
+        assertEquals(404, exception2.getErrorCode());
     }
 
     @Override
@@ -100,10 +100,10 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
         super.enqueueMockResponse(body, 500);
         var exception2 = assertThrows(RestCallException.class, () -> vehicleService.get("1"));
 
-        assert (exception.getMessage().equals(body));
-        assert (exception.getErrorCode() == 500);
-        assert (exception2.getMessage().equals(body));
-        assert (exception2.getErrorCode() == 500);
+        assertEquals(exception.getMessage(), body);
+        assertEquals(500, exception.getErrorCode());
+        assertEquals(exception2.getMessage(), body);
+        assertEquals(500, exception2.getErrorCode());
     }
 
     @Override
@@ -115,77 +115,28 @@ class VehicleServiceMockTest extends GenericServiceTest<VehicleInfoResponseWithI
         super.enqueueMockResponse(null, 500);
         var exception2 = assertThrows(RestCallException.class, () -> vehicleService.get("1"));
 
-        assert (exception.getMessage().equals(ExceptionMessages.NO_BODY_MESSAGE));
-        assert (exception.getErrorCode() == 500);
-        assert (exception2.getMessage().equals(ExceptionMessages.NO_BODY_MESSAGE));
-        assert (exception2.getErrorCode() == 500);
+        assertEquals(ExceptionMessages.NO_BODY_MESSAGE, exception.getMessage());
+        assertEquals(500, exception.getErrorCode());
+        assertEquals(ExceptionMessages.NO_BODY_MESSAGE, exception2.getMessage());
+        assertEquals(500, exception2.getErrorCode());
     }
 
     @Override
+    @Disabled("Not applicable")
     public void test_getResourceAsync_200() {
-        VehicleResponseDTO body = new VehicleResponseDTO(
-                List.of(
-                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
-                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
-                ));
 
-        VehicleResponseDTO body2 = new VehicleResponseDTO(
-                List.of(
-                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
-                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
-                ));
-        super.enqueueMockResponse(body, 200);
-        super.enqueueMockResponse(body, 200);
-
-        var response = vehicleService.getAsync(List.of("1","2"));
-
-        assert(response.size() == 2);
-        assert (response.stream().anyMatch(r -> r.equals(body)));
-        assert (response.stream().anyMatch(r -> r.equals(body2)));
     }
 
     @Override
+    @Disabled("Not applicable")
     public void test_getResourceAsync_when_at_least_one_200() {
-        VehicleResponseDTO body = new VehicleResponseDTO(
-                List.of(
-                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
-                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
-                ));
 
-        VehicleResponseDTO body2 = new VehicleResponseDTO(
-                List.of(
-                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
-                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
-                ));
-        super.enqueueMockResponse(body, 200);
-        super.enqueueMockResponse(body, 400);
-
-        var response = vehicleService.getAsync(List.of("1","2"));
-
-        assert(response.size() == 1);
-        assert (response.stream().anyMatch(r -> r.equals(body)));
-        assert (response.stream().noneMatch(r -> r.equals(body2)));
     }
 
     @Override
+    @Disabled("Not applicable")
     public void test_getResourceAsync_when_none_200() {
-        VehicleResponseDTO body = new VehicleResponseDTO(
-                List.of(
-                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
-                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
-                ));
 
-        VehicleResponseDTO body2 = new VehicleResponseDTO(
-                List.of(
-                        new VehicleDTO("bd45a676-0d0e-48b4-9693-e8196eb7fcbf", "big truck"),
-                        new VehicleDTO("2337d25f-8917-4e26-920f-ddbe9ba063d6", "small truck")
-                ));
-        super.enqueueMockResponse(body, 400);
-        super.enqueueMockResponse(body, 400);
-
-        var response = vehicleService.getAsync(List.of("1","2"));
-
-        assert(response.isEmpty());
     }
 
 }
